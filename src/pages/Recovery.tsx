@@ -26,12 +26,10 @@ const Recovery = () => {
     const { name, value } = e.target;
     const numValue = parseInt(value);
     
-    if (numValue >= 1 && numValue <= 10) {
+    if ((numValue >= 0 && numValue <= 10) || value === "") {
       setMetrics(prev => ({ ...prev, [name]: value }));
-    } else if (value === "") {
-      setMetrics(prev => ({ ...prev, [name]: "" }));
     } else {
-      toast.error("Please enter a number between 1 and 10");
+      toast.error("Please enter a number between 0 and 10");
     }
   };
 
@@ -46,7 +44,7 @@ const Recovery = () => {
           <CardHeader>
             <CardTitle>Enter Your Metrics</CardTitle>
             <CardDescription>
-              Rate each metric from 1 (lowest) to 10 (highest)
+              Rate each metric from 0 (lowest) to 10 (highest)
             </CardDescription>
           </CardHeader>
           <CardContent className="grid gap-4">
@@ -56,11 +54,11 @@ const Recovery = () => {
                 id="painLevel"
                 name="painLevel"
                 type="number"
-                min="1"
+                min="0"
                 max="10"
                 value={metrics.painLevel}
                 onChange={handleInputChange}
-                placeholder="1-10"
+                placeholder="0-10"
               />
             </div>
             <div>
@@ -69,11 +67,11 @@ const Recovery = () => {
                 id="mobilityLevel"
                 name="mobilityLevel"
                 type="number"
-                min="1"
+                min="0"
                 max="10"
                 value={metrics.mobilityLevel}
                 onChange={handleInputChange}
-                placeholder="1-10"
+                placeholder="0-10"
               />
             </div>
             <div>
@@ -82,11 +80,11 @@ const Recovery = () => {
                 id="fatigueLevel"
                 name="fatigueLevel"
                 type="number"
-                min="1"
+                min="0"
                 max="10"
                 value={metrics.fatigueLevel}
                 onChange={handleInputChange}
-                placeholder="1-10"
+                placeholder="0-10"
               />
             </div>
             <div>
@@ -95,11 +93,11 @@ const Recovery = () => {
                 id="dailyActivity"
                 name="dailyActivity"
                 type="number"
-                min="1"
+                min="0"
                 max="10"
                 value={metrics.dailyActivity}
                 onChange={handleInputChange}
-                placeholder="1-10"
+                placeholder="0-10"
               />
             </div>
             <div>
@@ -108,11 +106,11 @@ const Recovery = () => {
                 id="sleepQuality"
                 name="sleepQuality"
                 type="number"
-                min="1"
+                min="0"
                 max="10"
                 value={metrics.sleepQuality}
                 onChange={handleInputChange}
-                placeholder="1-10"
+                placeholder="0-10"
               />
             </div>
             <div>
@@ -121,11 +119,11 @@ const Recovery = () => {
                 id="dietaryHabits"
                 name="dietaryHabits"
                 type="number"
-                min="1"
+                min="0"
                 max="10"
                 value={metrics.dietaryHabits}
                 onChange={handleInputChange}
-                placeholder="1-10"
+                placeholder="0-10"
               />
             </div>
           </CardContent>

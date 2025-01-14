@@ -1,7 +1,10 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const Hero = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="hero-gradient pt-20">
       <div className="container mx-auto px-6 py-20 md:py-32">
@@ -13,7 +16,11 @@ export const Hero = () => {
             <p className="text-lg md:text-xl text-muted-foreground mb-8">
               Track your progress, connect with specialists, and take control of your physical and mental well-being with our comprehensive recovery assistance platform.
             </p>
-            <Button size="lg" className="text-lg">
+            <Button 
+              size="lg" 
+              className="text-lg"
+              onClick={() => navigate("/recovery")}
+            >
               Start Your Recovery Journey <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </div>
