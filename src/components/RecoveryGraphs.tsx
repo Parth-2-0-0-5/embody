@@ -68,7 +68,7 @@ export const RecoveryGraphs: React.FC<RecoveryGraphsProps> = ({ metrics }) => {
         <CardTitle>Your Progress</CardTitle>
         <CardDescription>Recovery and Health Metrics</CardDescription>
       </CardHeader>
-      <CardContent className="grid gap-6">
+      <CardContent className="grid gap-12">
         <div className="h-[300px]">
           <CardTitle className="mb-4">Historical Trends</CardTitle>
           <ChartContainer

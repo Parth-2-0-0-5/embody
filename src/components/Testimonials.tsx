@@ -3,19 +3,19 @@ import { Star } from "lucide-react";
 
 const testimonials = [
   {
-    name: "Sarah Johnson",
+    name: "Krishna G",
     role: "Physical Recovery Patient",
     content: "This app has been instrumental in my recovery journey. The progress tracking features helped me stay motivated throughout my rehabilitation.",
     rating: 5
   },
   {
-    name: "Michael Chen",
+    name: "Suhani A",
     role: "Mental Health Journey",
     content: "The mental wellness tools and community support have made a significant difference in my daily life. I feel more in control of my recovery.",
     rating: 5
   },
   {
-    name: "Emma Thompson",
+    name: "Shruti S",
     role: "Sports Injury Recovery",
     content: "Being able to track my progress and share it with my physiotherapist has made my recovery much more efficient. Highly recommended!",
     rating: 5
