@@ -11,7 +11,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { RadialBarChart, RadialBar, Legend } from "recharts";
+import { RadialBarChart, RadialBar, Legend, Tooltip } from "recharts";
 
 interface Metrics {
   painLevel: string;
@@ -81,15 +81,25 @@ export const RecoveryGraphs: React.FC<RecoveryGraphsProps> = ({ metrics }) => {
               endAngle={0}
             >
               <RadialBar
-                minAngle={15}
-                background
-                clockWise={true}
                 dataKey="value"
+                cornerRadius={30}
+                background={{ fill: "#f3f4f6" }}
+                clockWise
               />
               <Legend />
-              <ChartTooltip>
-                <ChartTooltipContent />
-              </ChartTooltip>
+              <Tooltip
+                cursor={false}
+                content={({ payload }) => {
+                  if (payload && payload.length) {
+                    return (
+                      <div className="bg-white p-2 rounded shadow">
+                        <p className="text-sm">{`${payload[0].value}%`}</p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
             </RadialBarChart>
           </ChartContainer>
         </div>
@@ -109,15 +119,25 @@ export const RecoveryGraphs: React.FC<RecoveryGraphsProps> = ({ metrics }) => {
               endAngle={0}
             >
               <RadialBar
-                minAngle={15}
-                background
-                clockWise={true}
                 dataKey="value"
+                cornerRadius={30}
+                background={{ fill: "#f3f4f6" }}
+                clockWise
               />
               <Legend />
-              <ChartTooltip>
-                <ChartTooltipContent />
-              </ChartTooltip>
+              <Tooltip
+                cursor={false}
+                content={({ payload }) => {
+                  if (payload && payload.length) {
+                    return (
+                      <div className="bg-white p-2 rounded shadow">
+                        <p className="text-sm">{`${payload[0].value}%`}</p>
+                      </div>
+                    );
+                  }
+                  return null;
+                }}
+              />
             </RadialBarChart>
           </ChartContainer>
         </div>
