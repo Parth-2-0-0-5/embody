@@ -26,8 +26,8 @@ export const Hero = () => {
           </div>
           <div className="flex justify-center md:justify-end">
             <img
-              src="/doctor.png"
-              alt="Doctor with a caring smile"
+              src="/lovable-uploads/e2ad1f69-6676-4c42-b163-718b4e304d5a.png"
+              alt="Healthcare professional with stethoscope"
               className="w-full max-w-md object-contain"
             />
           </div>
