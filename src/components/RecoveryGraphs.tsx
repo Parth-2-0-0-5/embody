@@ -84,7 +84,6 @@ export const RecoveryGraphs: React.FC<RecoveryGraphsProps> = ({ metrics }) => {
                 dataKey="value"
                 cornerRadius={30}
                 background={{ fill: "#f3f4f6" }}
-                clockWise
               />
               <Legend />
               <Tooltip
@@ -122,7 +121,6 @@ export const RecoveryGraphs: React.FC<RecoveryGraphsProps> = ({ metrics }) => {
                 dataKey="value"
                 cornerRadius={30}
                 background={{ fill: "#f3f4f6" }}
-                clockWise
               />
               <Legend />
               <Tooltip
