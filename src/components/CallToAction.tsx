@@ -1,6 +1,9 @@
 import { Button } from "@/components/ui/button";
+import { useNavigate } from "react-router-dom";
 
 export const CallToAction = () => {
+  const navigate = useNavigate();
+
   return (
     <section className="hero-gradient py-20">
       <div className="container mx-auto px-6 text-center">
@@ -10,7 +13,11 @@ export const CallToAction = () => {
         <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
           Join thousands of others who have transformed their recovery experience with our comprehensive support system.
         </p>
-        <Button size="lg" className="text-lg">
+        <Button 
+          size="lg" 
+          className="text-lg"
+          onClick={() => navigate("/recovery")}
+        >
           Get Started Now
         </Button>
       </div>
