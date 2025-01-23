@@ -19,7 +19,7 @@ export const Hero = () => {
             <Button 
               size="lg" 
               className="text-lg"
-              onClick={() => navigate("/recovery")}
+              onClick={() => navigate("/dashboard")}
             >
               Start Your Recovery Journey <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
