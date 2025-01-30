@@ -83,3 +83,31 @@
 .hover-scale {
   @apply transition-transform duration-200 hover:scale-105;
 }
+
+.wave-animation {
+  background: linear-gradient(60deg, #abecd6 0%, #fbed96 100%);
+  background-size: 400% 400%;
+  animation: wave 10s ease infinite;
+}
+
+.wave-animation-alt {
+  background: linear-gradient(to right, #accbee 0%, #e7f0fd 100%);
+  background-size: 400% 400%;
+  animation: wave 12s ease infinite;
+}
+
+@keyframes wave {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.icon-float {
+  animation: float 3s ease-in-out infinite;
+}
