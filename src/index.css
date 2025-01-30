@@ -3,6 +3,10 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   :root {
     --background: 210 40% 98%;
     --foreground: 222 47% 11%;
@@ -55,4 +59,27 @@
 
 .testimonial-card {
   @apply bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-xl;
+}
+
+.floating-animation {
+  animation: floating 3s ease-in-out infinite;
+}
+
+@keyframes floating {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.pulse-animation {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: .7; }
+}
+
+.hover-scale {
+  @apply transition-transform duration-200 hover:scale-105;
 }
