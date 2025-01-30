@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Activity, Droplets, Dumbbell, LineChart } from "lucide-react";
 
 const Dashboard = () => {
-  const username = "John"; // This would normally come from auth/state management
+  const username = "John";
   
   const tasks = [
     {
@@ -34,10 +34,7 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Top wave decoration */}
-      <div className="absolute top-0 left-0 right-0 h-64 wave-animation opacity-20 -z-10" />
-      
+    <div className="min-h-screen dashboard-bg">
       <div className="container mx-auto px-4 py-8 pt-24">
         <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
           Welcome back, {username}!
@@ -46,18 +43,15 @@ const Dashboard = () => {
           Here's your recovery dashboard
         </p>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-          {/* Background wave effect */}
-          <div className="absolute inset-0 wave-animation-alt opacity-10 rounded-3xl -z-10" />
-          
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {tasks.map((task, index) => (
             <Card 
               key={index} 
-              className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 backdrop-blur-sm bg-white/50"
+              className="glass-card hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
             >
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-lg font-medium">{task.title}</CardTitle>
-                <div className="p-2 rounded-full bg-white/80 shadow-sm">
+                <div className="p-2 rounded-full bg-white/80 dark:bg-gray-700/80 shadow-sm">
                   {task.icon}
                 </div>
               </CardHeader>
@@ -74,9 +68,6 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
-      
-      {/* Bottom wave decoration */}
-      <div className="absolute bottom-0 left-0 right-0 h-64 wave-animation opacity-20 -z-10" />
     </div>
   );
 };

@@ -1,10 +1,11 @@
 import { SignUpDialog } from "./SignUpDialog";
 import { FontToggle } from "./FontToggle";
+import { DarkModeToggle } from "./DarkModeToggle";
 import { motion } from "framer-motion";
 
 export function Header() {
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-sm border-b">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b dark:border-gray-800">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-20">
           <motion.div 
@@ -23,7 +24,7 @@ export function Header() {
               <motion.a
                 key={item}
                 href={`#${item.toLowerCase()}`}
-                className="text-sm font-medium relative group"
+                className="text-sm font-medium relative group dark:text-gray-300"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
@@ -41,6 +42,7 @@ export function Header() {
             className="flex items-center gap-4"
           >
             <FontToggle />
+            <DarkModeToggle />
             <SignUpDialog />
           </motion.div>
         </div>

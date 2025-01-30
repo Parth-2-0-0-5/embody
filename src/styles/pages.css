@@ -1,0 +1,11 @@
+.dashboard-bg {
+  @apply bg-[#D3E4FD] dark:bg-gray-900;
+}
+
+.recovery-bg {
+  @apply bg-[#D3E4FD] dark:bg-gray-900;
+}
+
+.glass-card {
+  @apply backdrop-blur-xl bg-white/80 dark:bg-gray-800/80 border border-white/20 dark:border-gray-700/20;
+}
