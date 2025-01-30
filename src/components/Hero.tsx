@@ -7,7 +7,7 @@ export const Hero = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="hero-gradient pt-20">
+    <div className="hero-gradient dark:bg-gray-900">
       <div className="container mx-auto px-6 py-20 md:py-32">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <motion.div 
@@ -20,7 +20,7 @@ export const Hero = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.2 }}
-              className="text-4xl md:text-6xl font-bold text-primary mb-6"
+              className="text-4xl md:text-6xl font-bold text-primary dark:text-white mb-6"
             >
               Your Journey to Recovery Starts Here
             </motion.h1>
@@ -28,7 +28,7 @@ export const Hero = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4 }}
-              className="text-lg md:text-xl text-muted-foreground mb-8"
+              className="text-lg md:text-xl text-muted-foreground dark:text-gray-300 mb-8"
             >
               Track your progress, connect with specialists, and take control of your physical and mental well-being with our comprehensive recovery assistance platform.
             </motion.p>
@@ -39,7 +39,7 @@ export const Hero = () => {
             >
               <Button 
                 size="lg" 
-                className="text-lg hover-scale"
+                className="text-lg hover-scale dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
                 onClick={() => navigate("/dashboard")}
               >
                 Start Your Recovery Journey <ArrowRight className="ml-2 h-5 w-5" />
@@ -71,9 +71,9 @@ export const Hero = () => {
             { title: "Recovery Rate", value: "95%" },
             { title: "Happy Patients", value: "10,000+" }
           ].map((stat, index) => (
-            <div key={index} className="bg-white/50 backdrop-blur-sm rounded-lg p-6 text-center hover-scale">
-              <h3 className="text-2xl font-bold text-primary">{stat.value}</h3>
-              <p className="text-muted-foreground">{stat.title}</p>
+            <div key={index} className="bg-white/50 dark:bg-gray-800/50 backdrop-blur-sm rounded-lg p-6 text-center hover-scale">
+              <h3 className="text-2xl font-bold text-primary dark:text-white">{stat.value}</h3>
+              <p className="text-muted-foreground dark:text-gray-300">{stat.title}</p>
             </div>
           ))}
         </motion.div>

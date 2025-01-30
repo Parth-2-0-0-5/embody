@@ -2,12 +2,16 @@
   background: linear-gradient(to right, #accbee 0%, #e7f0fd 100%);
 }
 
+.dark .hero-gradient {
+  background: linear-gradient(to right, #1a1f2c 0%, #221f26 100%);
+}
+
 .feature-card {
   @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
 }
 
 .testimonial-card {
-  @apply bg-white rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-xl dark:bg-gray-800;
+  @apply bg-white dark:bg-gray-800 rounded-xl shadow-md p-6 transition-all duration-300 hover:shadow-xl;
 }
 
 .floating-animation {
@@ -41,4 +45,22 @@
   0% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
   100% { transform: translateY(0px); }
+}
+
+.wave-animation {
+  background: linear-gradient(45deg, #4a90e2, #63b3ed);
+  opacity: 0.1;
+}
+
+.dark .wave-animation {
+  background: linear-gradient(45deg, #2d3748, #1a202c);
+}
+
+.wave-animation-alt {
+  background: linear-gradient(-45deg, #4a90e2, #63b3ed);
+  opacity: 0.1;
+}
+
+.dark .wave-animation-alt {
+  background: linear-gradient(-45deg, #2d3748, #1a202c);
 }

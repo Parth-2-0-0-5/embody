@@ -37,15 +37,14 @@ const Recovery = () => {
   const allFieldsFilled = Object.values(metrics).every(value => value !== "");
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Top wave decoration */}
+    <div className="min-h-screen relative overflow-hidden bg-[#D3E4FD] dark:bg-gray-900">
       <div className="absolute top-0 left-0 right-0 h-64 wave-animation opacity-20 -z-10" />
 
       <div className="container mx-auto py-8 px-4">
         <motion.h1 
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent"
+          className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-purple-600 dark:from-white dark:to-purple-400 bg-clip-text text-transparent"
         >
           Recovery Tracking
         </motion.h1>
@@ -53,13 +52,12 @@ const Recovery = () => {
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="text-muted-foreground mb-8"
+          className="text-muted-foreground dark:text-gray-300 mb-8"
         >
           Track your daily recovery metrics to monitor your progress
         </motion.p>
       
         <div className="grid gap-8 md:grid-cols-2 relative">
-          {/* Background wave effect */}
           <div className="absolute inset-0 wave-animation-alt opacity-10 rounded-3xl -z-10" />
 
           <motion.div
@@ -67,10 +65,10 @@ const Recovery = () => {
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.2 }}
           >
-            <Card className="backdrop-blur-sm bg-white/50">
+            <Card className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50">
               <CardHeader>
-                <CardTitle>Enter Your Metrics</CardTitle>
-                <CardDescription>
+                <CardTitle className="dark:text-white">Enter Your Metrics</CardTitle>
+                <CardDescription className="dark:text-gray-300">
                   Rate each metric from 0 (lowest) to 10 (highest)
                 </CardDescription>
               </CardHeader>
@@ -84,7 +82,7 @@ const Recovery = () => {
                   { id: "dietaryHabits", label: "Dietary Habits" },
                 ].map((field) => (
                   <div key={field.id}>
-                    <Label htmlFor={field.id}>{field.label}</Label>
+                    <Label htmlFor={field.id} className="dark:text-white">{field.label}</Label>
                     <Input
                       id={field.id}
                       name={field.id}
@@ -94,7 +92,7 @@ const Recovery = () => {
                       value={metrics[field.id as keyof typeof metrics]}
                       onChange={handleInputChange}
                       placeholder="0-10"
-                      className="mt-1"
+                      className="mt-1 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                     />
                   </div>
                 ))}
@@ -114,7 +112,6 @@ const Recovery = () => {
         </div>
       </div>
 
-      {/* Bottom wave decoration */}
       <div className="absolute bottom-0 left-0 right-0 h-64 wave-animation opacity-20 -z-10" />
     </div>
   );
