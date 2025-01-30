@@ -34,12 +34,12 @@ const Dashboard = () => {
   ];
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative overflow-hidden">
       {/* Top wave decoration */}
-      <div className="absolute top-0 left-0 right-0 h-48 wave-animation opacity-20 -z-10" />
+      <div className="absolute top-0 left-0 right-0 h-64 wave-animation opacity-20 -z-10" />
       
       <div className="container mx-auto px-4 py-8 pt-24">
-        <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-blue-600 bg-clip-text text-transparent">
+        <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent">
           Welcome back, {username}!
         </h1>
         <p className="text-muted-foreground mb-8 text-lg">
@@ -64,7 +64,7 @@ const Dashboard = () => {
               <CardContent>
                 <p className="text-sm text-muted-foreground mb-4">{task.description}</p>
                 <Button 
-                  className="w-full bg-gradient-to-r from-primary to-blue-600 hover:opacity-90"
+                  className="w-full bg-gradient-to-r from-primary to-purple-600 hover:opacity-90"
                   onClick={() => task.link ? window.location.href = task.link : null}
                 >
                   {task.link ? "Go to page" : task.action}
@@ -76,7 +76,7 @@ const Dashboard = () => {
       </div>
       
       {/* Bottom wave decoration */}
-      <div className="absolute bottom-0 left-0 right-0 h-48 wave-animation opacity-20 -z-10" />
+      <div className="absolute bottom-0 left-0 right-0 h-64 wave-animation opacity-20 -z-10" />
     </div>
   );
 };

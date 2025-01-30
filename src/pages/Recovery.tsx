@@ -11,6 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { RecoveryGraphs } from "@/components/RecoveryGraphs";
+import { motion } from "framer-motion";
 
 const Recovery = () => {
   const [metrics, setMetrics] = useState({
@@ -36,103 +37,85 @@ const Recovery = () => {
   const allFieldsFilled = Object.values(metrics).every(value => value !== "");
 
   return (
-    <div className="container mx-auto py-8 px-4">
-      <h1 className="text-3xl font-bold mb-8">Recovery Tracking</h1>
-      
-      <div className="grid gap-8 md:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle>Enter Your Metrics</CardTitle>
-            <CardDescription>
-              Rate each metric from 0 (lowest) to 10 (highest)
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="grid gap-4">
-            <div>
-              <Label htmlFor="painLevel">Pain Level</Label>
-              <Input
-                id="painLevel"
-                name="painLevel"
-                type="number"
-                min="0"
-                max="10"
-                value={metrics.painLevel}
-                onChange={handleInputChange}
-                placeholder="0-10"
-              />
-            </div>
-            <div>
-              <Label htmlFor="mobilityLevel">Mobility Level</Label>
-              <Input
-                id="mobilityLevel"
-                name="mobilityLevel"
-                type="number"
-                min="0"
-                max="10"
-                value={metrics.mobilityLevel}
-                onChange={handleInputChange}
-                placeholder="0-10"
-              />
-            </div>
-            <div>
-              <Label htmlFor="fatigueLevel">Fatigue Level</Label>
-              <Input
-                id="fatigueLevel"
-                name="fatigueLevel"
-                type="number"
-                min="0"
-                max="10"
-                value={metrics.fatigueLevel}
-                onChange={handleInputChange}
-                placeholder="0-10"
-              />
-            </div>
-            <div>
-              <Label htmlFor="dailyActivity">Daily Activity</Label>
-              <Input
-                id="dailyActivity"
-                name="dailyActivity"
-                type="number"
-                min="0"
-                max="10"
-                value={metrics.dailyActivity}
-                onChange={handleInputChange}
-                placeholder="0-10"
-              />
-            </div>
-            <div>
-              <Label htmlFor="sleepQuality">Sleep Quality</Label>
-              <Input
-                id="sleepQuality"
-                name="sleepQuality"
-                type="number"
-                min="0"
-                max="10"
-                value={metrics.sleepQuality}
-                onChange={handleInputChange}
-                placeholder="0-10"
-              />
-            </div>
-            <div>
-              <Label htmlFor="dietaryHabits">Dietary Habits</Label>
-              <Input
-                id="dietaryHabits"
-                name="dietaryHabits"
-                type="number"
-                min="0"
-                max="10"
-                value={metrics.dietaryHabits}
-                onChange={handleInputChange}
-                placeholder="0-10"
-              />
-            </div>
-          </CardContent>
-        </Card>
+    <div className="min-h-screen relative overflow-hidden">
+      {/* Top wave decoration */}
+      <div className="absolute top-0 left-0 right-0 h-64 wave-animation opacity-20 -z-10" />
 
-        {allFieldsFilled && (
-          <RecoveryGraphs metrics={metrics} />
-        )}
+      <div className="container mx-auto py-8 px-4">
+        <motion.h1 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-purple-600 bg-clip-text text-transparent"
+        >
+          Recovery Tracking
+        </motion.h1>
+        <motion.p 
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
+          className="text-muted-foreground mb-8"
+        >
+          Track your daily recovery metrics to monitor your progress
+        </motion.p>
+      
+        <div className="grid gap-8 md:grid-cols-2 relative">
+          {/* Background wave effect */}
+          <div className="absolute inset-0 wave-animation-alt opacity-10 rounded-3xl -z-10" />
+
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
+          >
+            <Card className="backdrop-blur-sm bg-white/50">
+              <CardHeader>
+                <CardTitle>Enter Your Metrics</CardTitle>
+                <CardDescription>
+                  Rate each metric from 0 (lowest) to 10 (highest)
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="grid gap-4">
+                {[
+                  { id: "painLevel", label: "Pain Level" },
+                  { id: "mobilityLevel", label: "Mobility Level" },
+                  { id: "fatigueLevel", label: "Fatigue Level" },
+                  { id: "dailyActivity", label: "Daily Activity" },
+                  { id: "sleepQuality", label: "Sleep Quality" },
+                  { id: "dietaryHabits", label: "Dietary Habits" },
+                ].map((field) => (
+                  <div key={field.id}>
+                    <Label htmlFor={field.id}>{field.label}</Label>
+                    <Input
+                      id={field.id}
+                      name={field.id}
+                      type="number"
+                      min="0"
+                      max="10"
+                      value={metrics[field.id as keyof typeof metrics]}
+                      onChange={handleInputChange}
+                      placeholder="0-10"
+                      className="mt-1"
+                    />
+                  </div>
+                ))}
+              </CardContent>
+            </Card>
+          </motion.div>
+
+          {allFieldsFilled && (
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <RecoveryGraphs metrics={metrics} />
+            </motion.div>
+          )}
+        </div>
       </div>
+
+      {/* Bottom wave decoration */}
+      <div className="absolute bottom-0 left-0 right-0 h-64 wave-animation opacity-20 -z-10" />
     </div>
   );
 };
