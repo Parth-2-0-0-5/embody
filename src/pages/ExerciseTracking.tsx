@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import {
@@ -10,17 +9,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { RecoveryGraphs } from "@/components/RecoveryGraphs";
 import { motion } from "framer-motion";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+} from "@/components/ui/chart";
 
 const ExerciseTracking = () => {
   const [metrics, setMetrics] = useState({
     exerciseTime: "",
     intensity: "",
     heartRate: "",
-    caloriesBurned: "",
-    muscleStrain: "",
-    energyLevel: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +43,15 @@ const ExerciseTracking = () => {
   };
 
   const allFieldsFilled = Object.values(metrics).every(value => value !== "");
+
+  // Sample historical data for single line graph
+  const historicalData = [
+    { date: '2024-01-01', exercise: 6 },
+    { date: '2024-01-02', exercise: 7 },
+    { date: '2024-01-03', exercise: 8 },
+    { date: '2024-01-04', exercise: 7 },
+    { date: '2024-01-05', exercise: parseInt(metrics.exerciseTime) || 0 },
+  ];
 
   return (
     <div className="min-h-screen bg-[#D3E4FD] dark:bg-gray-900">
@@ -73,9 +90,6 @@ const ExerciseTracking = () => {
                   { id: "exerciseTime", label: "Exercise Duration" },
                   { id: "intensity", label: "Workout Intensity" },
                   { id: "heartRate", label: "Heart Rate Level" },
-                  { id: "caloriesBurned", label: "Calories Burned" },
-                  { id: "muscleStrain", label: "Muscle Strain" },
-                  { id: "energyLevel", label: "Energy Level" },
                 ].map((field) => (
                   <div key={field.id}>
                     <Label htmlFor={field.id} className="dark:text-white">{field.label}</Label>
@@ -102,7 +116,38 @@ const ExerciseTracking = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <RecoveryGraphs metrics={metrics} />
+              <Card className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50">
+                <CardHeader>
+                  <CardTitle className="dark:text-white">Exercise Progress</CardTitle>
+                  <CardDescription className="dark:text-gray-300">
+                    Your exercise trends over time
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-[300px]">
+                    <ChartContainer
+                      config={{
+                        exercise: { color: "#22c55e" },
+                      }}
+                    >
+                      <LineChart data={historicalData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date" />
+                        <YAxis domain={[0, 10]} />
+                        <Tooltip />
+                        <Legend />
+                        <Line
+                          type="monotone"
+                          dataKey="exercise"
+                          stroke="#22c55e"
+                          name="Exercise Level"
+                          strokeWidth={2}
+                        />
+                      </LineChart>
+                    </ChartContainer>
+                  </div>
+                </CardContent>
+              </Card>
             </motion.div>
           )}
         </div>

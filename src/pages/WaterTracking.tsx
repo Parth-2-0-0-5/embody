@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import {
@@ -10,17 +9,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { RecoveryGraphs } from "@/components/RecoveryGraphs";
 import { motion } from "framer-motion";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+} from "@/components/ui/chart";
 
 const WaterTracking = () => {
   const [metrics, setMetrics] = useState({
     waterIntake: "",
     hydrationLevel: "",
     urineColor: "",
-    dailyGoal: "",
-    timeOfDay: "",
-    thirstLevel: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,6 +44,15 @@ const WaterTracking = () => {
 
   const allFieldsFilled = Object.values(metrics).every(value => value !== "");
 
+  // Sample historical data for single line graph
+  const historicalData = [
+    { date: '2024-01-01', hydration: 6 },
+    { date: '2024-01-02', hydration: 7 },
+    { date: '2024-01-03', hydration: 8 },
+    { date: '2024-01-04', hydration: 7 },
+    { date: '2024-01-05', hydration: parseInt(metrics.hydrationLevel) || 0 },
+  ];
+
   return (
     <div className="min-h-screen bg-[#D3E4FD] dark:bg-gray-900">
       <div className="container mx-auto py-8 px-4">
@@ -44,7 +61,7 @@ const WaterTracking = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-3xl font-bold mb-2 bg-gradient-to-r from-primary to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
         >
-          Water Intake Tracking
+          Water Tracking
         </motion.h1>
         <motion.p 
           initial={{ opacity: 0, y: -20 }}
@@ -73,9 +90,6 @@ const WaterTracking = () => {
                   { id: "waterIntake", label: "Water Intake (Glasses)" },
                   { id: "hydrationLevel", label: "Hydration Level" },
                   { id: "urineColor", label: "Urine Color (Clarity)" },
-                  { id: "dailyGoal", label: "Daily Goal Achievement" },
-                  { id: "timeOfDay", label: "Time Distribution" },
-                  { id: "thirstLevel", label: "Thirst Level" },
                 ].map((field) => (
                   <div key={field.id}>
                     <Label htmlFor={field.id} className="dark:text-white">{field.label}</Label>
@@ -102,7 +116,38 @@ const WaterTracking = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <RecoveryGraphs metrics={metrics} />
+              <Card className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50">
+                <CardHeader>
+                  <CardTitle className="dark:text-white">Hydration Progress</CardTitle>
+                  <CardDescription className="dark:text-gray-300">
+                    Your hydration trends over time
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-[300px]">
+                    <ChartContainer
+                      config={{
+                        hydration: { color: "#3b82f6" },
+                      }}
+                    >
+                      <LineChart data={historicalData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date" />
+                        <YAxis domain={[0, 10]} />
+                        <Tooltip />
+                        <Legend />
+                        <Line
+                          type="monotone"
+                          dataKey="hydration"
+                          stroke="#3b82f6"
+                          name="Hydration Level"
+                          strokeWidth={2}
+                        />
+                      </LineChart>
+                    </ChartContainer>
+                  </div>
+                </CardContent>
+              </Card>
             </motion.div>
           )}
         </div>

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import {
@@ -10,17 +9,26 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { RecoveryGraphs } from "@/components/RecoveryGraphs";
 import { motion } from "framer-motion";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+} from "recharts";
+import {
+  ChartContainer,
+  ChartTooltip,
+} from "@/components/ui/chart";
 
 const SleepTracking = () => {
   const [metrics, setMetrics] = useState({
     sleepDuration: "",
     sleepQuality: "",
-    dreamRecall: "",
     morningFeel: "",
-    napTime: "",
-    nightWakeups: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -35,6 +43,15 @@ const SleepTracking = () => {
   };
 
   const allFieldsFilled = Object.values(metrics).every(value => value !== "");
+
+  // Sample historical data for single line graph
+  const historicalData = [
+    { date: '2024-01-01', sleep: 6 },
+    { date: '2024-01-02', sleep: 7 },
+    { date: '2024-01-03', sleep: 8 },
+    { date: '2024-01-04', sleep: 7 },
+    { date: '2024-01-05', sleep: parseInt(metrics.sleepQuality) || 0 },
+  ];
 
   return (
     <div className="min-h-screen bg-[#D3E4FD] dark:bg-gray-900">
@@ -72,10 +89,7 @@ const SleepTracking = () => {
                 {[
                   { id: "sleepDuration", label: "Sleep Duration" },
                   { id: "sleepQuality", label: "Sleep Quality" },
-                  { id: "dreamRecall", label: "Dream Recall" },
                   { id: "morningFeel", label: "Morning Feeling" },
-                  { id: "napTime", label: "Nap Duration" },
-                  { id: "nightWakeups", label: "Night Wakeups" },
                 ].map((field) => (
                   <div key={field.id}>
                     <Label htmlFor={field.id} className="dark:text-white">{field.label}</Label>
@@ -102,7 +116,38 @@ const SleepTracking = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3 }}
             >
-              <RecoveryGraphs metrics={metrics} />
+              <Card className="backdrop-blur-sm bg-white/50 dark:bg-gray-800/50">
+                <CardHeader>
+                  <CardTitle className="dark:text-white">Sleep Progress</CardTitle>
+                  <CardDescription className="dark:text-gray-300">
+                    Your sleep quality trends over time
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="h-[300px]">
+                    <ChartContainer
+                      config={{
+                        sleep: { color: "#8b5cf6" },
+                      }}
+                    >
+                      <LineChart data={historicalData}>
+                        <CartesianGrid strokeDasharray="3 3" />
+                        <XAxis dataKey="date" />
+                        <YAxis domain={[0, 10]} />
+                        <Tooltip />
+                        <Legend />
+                        <Line
+                          type="monotone"
+                          dataKey="sleep"
+                          stroke="#8b5cf6"
+                          name="Sleep Quality"
+                          strokeWidth={2}
+                        />
+                      </LineChart>
+                    </ChartContainer>
+                  </div>
+                </CardContent>
+              </Card>
             </motion.div>
           )}
         </div>
