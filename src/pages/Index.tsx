@@ -19,10 +19,10 @@ const Index = () => {
       <section className="py-20 bg-white/50 dark:bg-gray-800/50">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 dark:text-white">
-            Track Your Progress
+            Daily Health Tracking
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card className="p-6 hover:shadow-lg transition-all duration-300 dark:bg-gray-700/50">
+            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 dark:bg-gray-700/50">
               <div className="flex items-center gap-4 mb-4">
                 <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-full">
                   <Droplets className="w-6 h-6 text-blue-500" />
@@ -34,7 +34,7 @@ const Index = () => {
               </p>
             </Card>
             
-            <Card className="p-6 hover:shadow-lg transition-all duration-300 dark:bg-gray-700/50">
+            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 dark:bg-gray-700/50">
               <div className="flex items-center gap-4 mb-4">
                 <div className="p-3 bg-green-100 dark:bg-green-900/50 rounded-full">
                   <Dumbbell className="w-6 h-6 text-green-500" />
@@ -46,7 +46,7 @@ const Index = () => {
               </p>
             </Card>
             
-            <Card className="p-6 hover:shadow-lg transition-all duration-300 dark:bg-gray-700/50">
+            <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 dark:bg-gray-700/50">
               <div className="flex items-center gap-4 mb-4">
                 <div className="p-3 bg-purple-100 dark:bg-purple-900/50 rounded-full">
                   <Moon className="w-6 h-6 text-purple-500" />
