@@ -8,8 +8,11 @@ export function DarkModeToggle() {
   const { toast } = useToast();
 
   useEffect(() => {
-    const isDarkMode = document.documentElement.classList.contains("dark");
+    const isDarkMode = localStorage.getItem('darkMode') === 'true';
     setIsDark(isDarkMode);
+    if (isDarkMode) {
+      document.documentElement.classList.add('dark');
+    }
   }, []);
 
   const toggleDarkMode = () => {
@@ -18,6 +21,7 @@ export function DarkModeToggle() {
     if (html.classList.contains("dark")) {
       html.classList.remove("dark");
       setIsDark(false);
+      localStorage.setItem('darkMode', 'false');
       toast({
         title: "Light mode activated",
         description: "The application is now in light mode",
@@ -25,6 +29,7 @@ export function DarkModeToggle() {
     } else {
       html.classList.add("dark");
       setIsDark(true);
+      localStorage.setItem('darkMode', 'true');
       toast({
         title: "Dark mode activated",
         description: "The application is now in dark mode",
