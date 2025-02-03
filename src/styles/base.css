@@ -70,7 +70,15 @@
   * {
     @apply border-border;
   }
+  
   body {
     @apply bg-background text-foreground;
+  }
+
+  /* Add smooth transition for all color properties */
+  *, *::before, *::after {
+    transition: background-color 0.3s ease-in-out,
+                border-color 0.3s ease-in-out,
+                color 0.3s ease-in-out;
   }
 }

@@ -2,9 +2,32 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 export const Hero = () => {
   const navigate = useNavigate();
+  const [isDarkMode, setIsDarkMode] = useState(false);
+
+  useEffect(() => {
+    // Check initial dark mode state
+    setIsDarkMode(document.documentElement.classList.contains('dark'));
+
+    // Create observer for dark mode changes
+    const observer = new MutationObserver((mutations) => {
+      mutations.forEach((mutation) => {
+        if (mutation.attributeName === 'class') {
+          setIsDarkMode(document.documentElement.classList.contains('dark'));
+        }
+      });
+    });
+
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class'],
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <div className="hero-gradient dark:bg-gray-900">
@@ -52,9 +75,13 @@ export const Hero = () => {
             transition={{ duration: 0.6 }}
             className="flex justify-center md:justify-end"
           >
-            <img
-              src="/lovable-uploads/e2ad1f69-6676-4c42-b163-718b4e304d5a.png"
-              alt="Healthcare professional with stethoscope"
+            <motion.img
+              key={isDarkMode ? 'dark' : 'light'}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.3 }}
+              src={isDarkMode ? "/lovable-uploads/dd7077c4-31b0-4d11-a6df-1610bee0b8aa.png" : "/lovable-uploads/e2ad1f69-6676-4c42-b163-718b4e304d5a.png"}
+              alt="Healthcare professional"
               className="w-full max-w-md object-contain floating-animation"
             />
           </motion.div>
