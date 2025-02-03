@@ -13,34 +13,23 @@ import {
 } from "@/components/ui/chart";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from "recharts";
 
-interface Metrics {
-  painLevel: string;
-  mobilityLevel: string;
-  fatigueLevel: string;
-  dailyActivity: string;
-  sleepQuality: string;
-  dietaryHabits: string;
+interface BaseMetrics {
+  [key: string]: string;
 }
 
-interface RecoveryGraphsProps {
-  metrics: Metrics;
-}
-
-export const RecoveryGraphs: React.FC<RecoveryGraphsProps> = ({ metrics }) => {
+export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) => {
   const calculateRecoveryPercentage = () => {
-    const painScore = 100 - (parseInt(metrics.painLevel) * 10);
-    const mobilityScore = parseInt(metrics.mobilityLevel) * 10;
-    const fatigueScore = 100 - (parseInt(metrics.fatigueLevel) * 10);
-    
-    return Math.round((painScore + mobilityScore + fatigueScore) / 3);
+    // Calculate average of first three metrics
+    const values = Object.values(metrics);
+    const firstThreeAverage = values.slice(0, 3).reduce((acc, curr) => acc + parseInt(curr), 0) / 3;
+    return Math.round(firstThreeAverage * 10);
   };
 
   const calculateHealthPercentage = () => {
-    const activityScore = parseInt(metrics.dailyActivity) * 10;
-    const sleepScore = parseInt(metrics.sleepQuality) * 10;
-    const dietScore = parseInt(metrics.dietaryHabits) * 10;
-    
-    return Math.round((activityScore + sleepScore + dietScore) / 3);
+    // Calculate average of last three metrics
+    const values = Object.values(metrics);
+    const lastThreeAverage = values.slice(3, 6).reduce((acc, curr) => acc + parseInt(curr), 0) / 3;
+    return Math.round(lastThreeAverage * 10);
   };
 
   // Sample historical data
@@ -53,20 +42,16 @@ export const RecoveryGraphs: React.FC<RecoveryGraphsProps> = ({ metrics }) => {
   ];
 
   // Current metrics for bar chart
-  const currentMetrics = [
-    { name: 'Pain', value: parseInt(metrics.painLevel) },
-    { name: 'Mobility', value: parseInt(metrics.mobilityLevel) },
-    { name: 'Fatigue', value: parseInt(metrics.fatigueLevel) },
-    { name: 'Activity', value: parseInt(metrics.dailyActivity) },
-    { name: 'Sleep', value: parseInt(metrics.sleepQuality) },
-    { name: 'Diet', value: parseInt(metrics.dietaryHabits) },
-  ];
+  const currentMetrics = Object.entries(metrics).map(([name, value]) => ({
+    name: name.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
+    value: parseInt(value)
+  }));
 
   return (
     <Card>
       <CardHeader>
         <CardTitle>Your Progress</CardTitle>
-        <CardDescription>Recovery and Health Metrics</CardDescription>
+        <CardDescription>Metrics Overview</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-12">
         <div className="h-[300px]">
