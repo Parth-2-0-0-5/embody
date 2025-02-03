@@ -4,6 +4,13 @@ import { DarkModeToggle } from "./DarkModeToggle";
 import { motion } from "framer-motion";
 
 export function Header() {
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm border-b dark:border-gray-800">
       <div className="container mx-auto px-4">
@@ -20,18 +27,22 @@ export function Header() {
           </motion.div>
           
           <nav className="hidden md:flex items-center gap-8">
-            {['Features', 'Testimonials', 'Contact'].map((item, index) => (
-              <motion.a
-                key={item}
-                href={`#${item.toLowerCase()}`}
+            {[
+              { name: 'Features', id: 'features' },
+              { name: 'Testimonials', id: 'testimonials' },
+              { name: 'Contact', id: 'contact' }
+            ].map((item, index) => (
+              <motion.button
+                key={item.name}
+                onClick={() => scrollToSection(item.id)}
                 className="text-sm font-medium relative group dark:text-gray-300"
                 initial={{ opacity: 0, y: -10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                {item}
+                {item.name}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all duration-300 group-hover:w-full" />
-              </motion.a>
+              </motion.button>
             ))}
           </nav>
           
