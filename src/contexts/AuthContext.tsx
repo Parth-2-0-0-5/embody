@@ -2,6 +2,8 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { User } from '@supabase/supabase-js';
 import { createClient } from '@supabase/supabase-js';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/components/ui/use-toast';
 
 interface AuthContextType {
   user: User | null;
@@ -16,16 +18,27 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseKey) {
-  throw new Error('Missing Supabase environment variables');
-}
-
-const supabase = createClient(supabaseUrl, supabaseKey);
+// Create a dummy client if credentials are missing
+const supabase = supabaseUrl && supabaseKey 
+  ? createClient(supabaseUrl, supabaseKey)
+  : null;
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
+    if (!supabase) {
+      toast({
+        title: "Configuration Error",
+        description: "Please connect your Supabase project in the project settings.",
+        variant: "destructive",
+      });
+      navigate('/');
+      return;
+    }
+
     supabase.auth.getSession().then(({ data: { session } }) => {
       if (session?.user) {
         setUser(session.user);
@@ -50,8 +63,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const logout = async () => {
-    await supabase.auth.signOut();
+    if (supabase) {
+      await supabase.auth.signOut();
+    }
     setUser(null);
+    navigate('/');
   };
 
   return (
