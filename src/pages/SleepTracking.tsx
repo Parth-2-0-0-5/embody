@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -56,9 +57,9 @@ const SleepTracking = () => {
   ];
 
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <SharedHeader />
-      <div className="min-h-screen bg-[#D3E4FD] dark:bg-gray-900">
+      <main className="flex-grow pt-24 bg-[#D3E4FD] dark:bg-gray-900">
         <div className="container mx-auto py-8 px-4">
           <motion.h1 
             initial={{ opacity: 0, y: -20 }}
@@ -156,9 +157,9 @@ const SleepTracking = () => {
           )}
           </div>
         </div>
-      </div>
+      </main>
       <Footer />
-    </>
+    </div>
   );
 };
 
