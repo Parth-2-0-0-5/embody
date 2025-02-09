@@ -12,6 +12,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 export function AuthForm() {
   const [isLoading, setIsLoading] = useState(false);
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { toast } = useToast();
@@ -23,25 +24,28 @@ export function AuthForm() {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signUp({
+      // First, sign up the user with email/password
+      const { data: authData, error: authError } = await supabase.auth.signUp({
         email,
         password,
         options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
+          data: {
+            username: username, // Store username in user metadata
+          },
         },
       });
 
-      if (error) {
+      if (authError) {
         toast({
           title: "Error",
-          description: error.message,
+          description: authError.message,
           variant: "destructive",
         });
         return;
       }
 
-      if (data.user) {
-        login(data.user.email!, data.user.id);
+      if (authData.user) {
+        login(authData.user.email!, authData.user.id);
         toast({
           title: "Success",
           description: "Account created successfully!",
@@ -64,6 +68,24 @@ export function AuthForm() {
     setIsLoading(true);
 
     try {
+      // First get the user's email by their username
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('username', username)
+        .single();
+
+      if (profileError) {
+        toast({
+          title: "Error",
+          description: "Username not found",
+          variant: "destructive",
+        });
+        setIsLoading(false);
+        return;
+      }
+
+      // Now sign in with the email and password
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -114,6 +136,17 @@ export function AuthForm() {
           <TabsContent value="login">
             <form onSubmit={handleSignIn} className="space-y-4 mt-4">
               <div className="space-y-2">
+                <Label htmlFor="username-login">Username</Label>
+                <Input
+                  id="username-login"
+                  type="text"
+                  placeholder="Enter your username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="email-login">Email</Label>
                 <Input
                   id="email-login"
@@ -142,6 +175,17 @@ export function AuthForm() {
           </TabsContent>
           <TabsContent value="register">
             <form onSubmit={handleSignUp} className="space-y-4 mt-4">
+              <div className="space-y-2">
+                <Label htmlFor="username-register">Username</Label>
+                <Input
+                  id="username-register"
+                  type="text"
+                  placeholder="Choose a username"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  required
+                />
+              </div>
               <div className="space-y-2">
                 <Label htmlFor="email-register">Email</Label>
                 <Input
