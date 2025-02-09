@@ -39,12 +39,12 @@ const App: React.FC = () => {
   return (
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <SessionContextProvider supabaseClient={supabase}>
-          <AuthProvider>
-            <TooltipProvider>
-              <Toaster />
-              <Sonner />
-              <BrowserRouter>
+        <BrowserRouter>
+          <SessionContextProvider supabaseClient={supabase}>
+            <AuthProvider>
+              <TooltipProvider>
+                <Toaster />
+                <Sonner />
                 <Routes>
                   <Route path="/" element={<Index />} />
                   <Route path="/recovery" element={
@@ -73,10 +73,10 @@ const App: React.FC = () => {
                     </ProtectedRoute>
                   } />
                 </Routes>
-              </BrowserRouter>
-            </TooltipProvider>
-          </AuthProvider>
-        </SessionContextProvider>
+              </TooltipProvider>
+            </AuthProvider>
+          </SessionContextProvider>
+        </BrowserRouter>
       </QueryClientProvider>
     </React.StrictMode>
   );
