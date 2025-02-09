@@ -71,7 +71,7 @@ export function AuthForm() {
       // First get the user's email by their username
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .select('id')
+        .select('id, username')
         .eq('username', username)
         .single();
 
@@ -85,9 +85,21 @@ export function AuthForm() {
         return;
       }
 
+      // Get user email from auth.users using the profile id
+      const { data: userData, error: userError } = await supabase.auth.admin.getUserById(profileData.id);
+      
+      if (userError || !userData?.user?.email) {
+        toast({
+          title: "Error",
+          description: "User not found",
+          variant: "destructive",
+        });
+        return;
+      }
+
       // Now sign in with the email and password
       const { data, error } = await supabase.auth.signInWithPassword({
-        email,
+        email: userData.user.email,
         password,
       });
 
@@ -143,17 +155,6 @@ export function AuthForm() {
                   placeholder="Enter your username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email-login">Email</Label>
-                <Input
-                  id="email-login"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
               </div>
