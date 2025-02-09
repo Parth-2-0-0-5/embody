@@ -1,3 +1,4 @@
+
 import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,9 +7,10 @@ import { useNavigate } from "react-router-dom";
 import { SharedHeader } from "@/components/SharedHeader";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Dashboard = () => {
-  const username = "John";
+  const { user } = useAuth();
   const navigate = useNavigate();
   
   const tasks = [
@@ -48,7 +50,7 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
           >
-            Welcome back, {username}!
+            Welcome back, {user?.name || "Guest"}!
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
