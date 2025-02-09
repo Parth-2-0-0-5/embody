@@ -5,6 +5,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createClientComponentClient } from '@supabase/auth-helpers-react';
+import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import Index from "./pages/Index";
 import Recovery from "./pages/Recovery";
 import Dashboard from "./pages/Dashboard";
@@ -23,6 +25,8 @@ const queryClient = new QueryClient({
   },
 });
 
+const supabase = createClientComponentClient();
+
 const App: React.FC = () => {
   useEffect(() => {
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
@@ -37,42 +41,44 @@ const App: React.FC = () => {
   return (
     <React.StrictMode>
       <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <TooltipProvider>
-            <Toaster />
-            <Sonner />
-            <BrowserRouter>
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/recovery" element={
-                  <ProtectedRoute>
-                    <Recovery />
-                  </ProtectedRoute>
-                } />
-                <Route path="/dashboard" element={
-                  <ProtectedRoute>
-                    <Dashboard />
-                  </ProtectedRoute>
-                } />
-                <Route path="/water-tracking" element={
-                  <ProtectedRoute>
-                    <WaterTracking />
-                  </ProtectedRoute>
-                } />
-                <Route path="/exercise-tracking" element={
-                  <ProtectedRoute>
-                    <ExerciseTracking />
-                  </ProtectedRoute>
-                } />
-                <Route path="/sleep-tracking" element={
-                  <ProtectedRoute>
-                    <SleepTracking />
-                  </ProtectedRoute>
-                } />
-              </Routes>
-            </BrowserRouter>
-          </TooltipProvider>
-        </AuthProvider>
+        <SessionContextProvider supabaseClient={supabase}>
+          <AuthProvider>
+            <TooltipProvider>
+              <Toaster />
+              <Sonner />
+              <BrowserRouter>
+                <Routes>
+                  <Route path="/" element={<Index />} />
+                  <Route path="/recovery" element={
+                    <ProtectedRoute>
+                      <Recovery />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/dashboard" element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/water-tracking" element={
+                    <ProtectedRoute>
+                      <WaterTracking />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/exercise-tracking" element={
+                    <ProtectedRoute>
+                      <ExerciseTracking />
+                    </ProtectedRoute>
+                  } />
+                  <Route path="/sleep-tracking" element={
+                    <ProtectedRoute>
+                      <SleepTracking />
+                    </ProtectedRoute>
+                  } />
+                </Routes>
+              </BrowserRouter>
+            </TooltipProvider>
+          </AuthProvider>
+        </SessionContextProvider>
       </QueryClientProvider>
     </React.StrictMode>
   );

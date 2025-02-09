@@ -1,14 +1,10 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
-
-interface User {
-  email: string;
-  name: string;
-}
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { createClientComponentClient, User } from '@supabase/auth-helpers-react';
 
 interface AuthContextType {
   user: User | null;
-  login: (email: string, name: string) => void;
+  login: (email: string, id: string) => void;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -17,12 +13,34 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
+  const supabase = createClientComponentClient();
 
-  const login = (email: string, name: string) => {
-    setUser({ email, name });
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      if (session?.user) {
+        setUser(session.user);
+      }
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (session?.user) {
+        setUser(session.user);
+      } else {
+        setUser(null);
+      }
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
+
+  const login = (email: string, id: string) => {
+    setUser({ email, id } as User);
   };
 
-  const logout = () => {
+  const logout = async () => {
+    await supabase.auth.signOut();
     setUser(null);
   };
 
