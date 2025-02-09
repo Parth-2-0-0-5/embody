@@ -50,7 +50,7 @@ export function SignUpDialog() {
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
-          <DropdownMenuItem className="font-medium">{user.name}</DropdownMenuItem>
+          <DropdownMenuItem className="font-medium">{user.email}</DropdownMenuItem>
           <DropdownMenuItem onClick={() => {
             logout();
             toast({
