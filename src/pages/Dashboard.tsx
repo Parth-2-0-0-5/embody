@@ -50,7 +50,7 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
           >
-            Welcome back, {user?.name || "Guest"}!
+            Welcome back, {user?.email?.split('@')[0] || "Guest"}!
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
