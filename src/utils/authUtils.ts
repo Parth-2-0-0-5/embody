@@ -21,7 +21,7 @@ export const signUpUser = async (
   if (authError) {
     toast({
       title: "Error",
-      description: authError.message,
+      children: authError.message,
       variant: "destructive",
     });
     return null;
@@ -45,7 +45,7 @@ export const signInUser = async (
   if (profileError) {
     toast({
       title: "Error",
-      description: "Username not found",
+      children: "Username not found",
       variant: "destructive",
     });
     return null;
@@ -57,7 +57,7 @@ export const signInUser = async (
   if (userError || !userData?.user?.email) {
     toast({
       title: "Error",
-      description: "User not found",
+      children: "User not found",
       variant: "destructive",
     });
     return null;
@@ -72,7 +72,7 @@ export const signInUser = async (
   if (error) {
     toast({
       title: "Error",
-      description: error.message,
+      children: error.message,
       variant: "destructive",
     });
     return null;
