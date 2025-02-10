@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Activity, Droplets, Dumbbell, LineChart, Moon } from "lucide-react";
@@ -8,10 +8,41 @@ import { SharedHeader } from "@/components/SharedHeader";
 import { Footer } from "@/components/Footer";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/components/ui/use-toast";
 
 const Dashboard = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const [username, setUsername] = useState<string>("");
+  
+  useEffect(() => {
+    const fetchUsername = async () => {
+      if (user) {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('id', user.id)
+          .single();
+        
+        if (error) {
+          toast({
+            title: "Error",
+            children: "Failed to fetch user profile",
+            variant: "destructive",
+          });
+          return;
+        }
+        
+        if (data) {
+          setUsername(data.username);
+        }
+      }
+    };
+
+    fetchUsername();
+  }, [user]);
   
   const tasks = [
     {
@@ -50,7 +81,7 @@ const Dashboard = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl font-bold mb-2 bg-gradient-to-r from-primary to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent"
           >
-            Welcome back, {user?.email?.split('@')[0] || "Guest"}!
+            Welcome back, {username || "Guest"}!
           </motion.h1>
           <motion.p 
             initial={{ opacity: 0, y: 20 }}
