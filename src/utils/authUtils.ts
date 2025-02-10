@@ -8,6 +8,22 @@ export const signUpUser = async (
   username: string,
   toast: (props: ToastProps) => void
 ) => {
+  // First check if username already exists
+  const { data: existingUser, error: usernameError } = await supabase
+    .from('profiles')
+    .select('username')
+    .eq('username', username)
+    .single();
+
+  if (existingUser) {
+    toast({
+      title: "Error",
+      children: "Username already taken. Please choose another username.",
+      variant: "destructive",
+    });
+    return null;
+  }
+
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
     password,
@@ -19,11 +35,20 @@ export const signUpUser = async (
   });
 
   if (authError) {
-    toast({
-      title: "Error",
-      children: authError.message,
-      variant: "destructive",
-    });
+    // Parse the error message for user already exists case
+    if (authError.message.includes("User already registered")) {
+      toast({
+        title: "Error",
+        children: "This email is already registered. Please try logging in instead.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Error",
+        children: authError.message,
+        variant: "destructive",
+      });
+    }
     return null;
   }
 
