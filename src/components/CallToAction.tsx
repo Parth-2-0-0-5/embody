@@ -1,8 +1,10 @@
+
 import { Button } from "@/components/ui/button";
-import { useNavigate } from "react-router-dom";
+import { AuthForm } from "./AuthForm";
+import { useAuth } from "@/contexts/AuthContext";
 
 export const CallToAction = () => {
-  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
 
   return (
     <section className="hero-gradient py-20">
@@ -13,13 +15,17 @@ export const CallToAction = () => {
         <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
           Join thousands of others who have transformed their health journey with our comprehensive tracking system.
         </p>
-        <Button 
-          size="lg" 
-          className="text-lg"
-          onClick={() => navigate("/dashboard")}
-        >
-          Get Started Now
-        </Button>
+        {isAuthenticated ? (
+          <Button 
+            size="lg" 
+            className="text-lg"
+            onClick={() => window.location.href = "/dashboard"}
+          >
+            Go to Dashboard
+          </Button>
+        ) : (
+          <AuthForm />
+        )}
       </div>
     </section>
   );

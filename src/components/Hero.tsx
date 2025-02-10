@@ -1,11 +1,13 @@
+
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/contexts/AuthContext";
+import { AuthForm } from "./AuthForm";
 
 export const Hero = () => {
-  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -60,13 +62,17 @@ export const Hero = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
             >
-              <Button 
-                size="lg" 
-                className="text-lg hover-scale dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
-                onClick={() => navigate("/dashboard")}
-              >
-                Start Your Recovery Journey <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              {isAuthenticated ? (
+                <Button 
+                  size="lg" 
+                  className="text-lg hover-scale dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
+                  onClick={() => window.location.href = "/dashboard"}
+                >
+                  Go to Dashboard <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
+              ) : (
+                <AuthForm />
+              )}
             </motion.div>
           </motion.div>
           <motion.div 

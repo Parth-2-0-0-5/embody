@@ -1,12 +1,12 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { Toast } from "@/components/ui/use-toast";
+import { ToastProps } from "@/components/ui/toast";
 
 export const signUpUser = async (
   email: string,
   password: string,
   username: string,
-  toast: (props: Toast) => void
+  toast: (props: ToastProps) => void
 ) => {
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
@@ -33,7 +33,7 @@ export const signUpUser = async (
 export const signInUser = async (
   username: string,
   password: string,
-  toast: (props: Toast) => void
+  toast: (props: ToastProps) => void
 ) => {
   // First get the user's email by their username
   const { data: profileData, error: profileError } = await supabase
