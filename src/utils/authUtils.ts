@@ -63,11 +63,11 @@ export const signInUser = async (
   // First get the user's email by their username
   const { data: profileData, error: profileError } = await supabase
     .from('profiles')
-    .select('id, username')
+    .select('id, email')
     .eq('username', username)
-    .single();
+    .maybeSingle();
 
-  if (profileError) {
+  if (!profileData || profileError) {
     toast({
       title: "Error",
       children: "Username not found",
@@ -76,21 +76,9 @@ export const signInUser = async (
     return null;
   }
 
-  // Get user email from auth.users using the profile id
-  const { data: userData, error: userError } = await supabase.auth.admin.getUserById(profileData.id);
-  
-  if (userError || !userData?.user?.email) {
-    toast({
-      title: "Error",
-      children: "User not found",
-      variant: "destructive",
-    });
-    return null;
-  }
-
   // Now sign in with the email and password
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: userData.user.email,
+    email: profileData.email,
     password,
   });
 
