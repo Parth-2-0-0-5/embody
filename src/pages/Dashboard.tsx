@@ -24,9 +24,10 @@ const Dashboard = () => {
           .from('profiles')
           .select('username')
           .eq('id', user.id)
-          .single();
+          .maybeSingle();
         
         if (error) {
+          console.error("Error fetching profile:", error);
           toast({
             title: "Error",
             children: "Failed to fetch user profile",
@@ -42,7 +43,7 @@ const Dashboard = () => {
     };
 
     fetchUsername();
-  }, [user]);
+  }, [user, toast]);
   
   const tasks = [
     {
