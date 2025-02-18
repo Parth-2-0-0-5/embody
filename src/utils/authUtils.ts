@@ -12,7 +12,7 @@ export const signUpUser = async (
   if (password.length < 6) {
     toast({
       title: "Error",
-      description: "Password must be at least 6 characters long",
+      children: "Password must be at least 6 characters long",
       variant: "destructive",
     });
     return null;
@@ -28,7 +28,7 @@ export const signUpUser = async (
   if (existingUser) {
     toast({
       title: "Error",
-      description: "Username already taken. Please choose another username.",
+      children: "Username already taken. Please choose another username.",
       variant: "destructive",
     });
     return null;
@@ -49,13 +49,13 @@ export const signUpUser = async (
     if (authError.message.includes("User already registered")) {
       toast({
         title: "Error",
-        description: "This email is already registered. Please try logging in instead.",
+        children: "This email is already registered. Please try logging in instead.",
         variant: "destructive",
       });
     } else {
       toast({
         title: "Error",
-        description: authError.message,
+        children: authError.message,
         variant: "destructive",
       });
     }
@@ -80,7 +80,7 @@ export const signInUser = async (
   if (!profileData) {
     toast({
       title: "Error",
-      description: "Username not found. Please check your username and try again.",
+      children: "Username not found. Please check your username and try again.",
       variant: "destructive",
     });
     return null;
@@ -89,7 +89,7 @@ export const signInUser = async (
   if (profileError) {
     toast({
       title: "Error",
-      description: "An error occurred while finding your account. Please try again.",
+      children: "An error occurred while finding your account. Please try again.",
       variant: "destructive",
     });
     return null;
@@ -104,7 +104,7 @@ export const signInUser = async (
   if (error) {
     toast({
       title: "Error",
-      description: "Invalid password. Please try again.",
+      children: "Invalid password. Please try again.",
       variant: "destructive",
     });
     return null;
