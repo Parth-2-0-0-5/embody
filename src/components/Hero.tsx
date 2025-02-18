@@ -4,10 +4,11 @@ import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { AuthForm } from "./AuthForm";
+import { useNavigate } from "react-router-dom";
 
 export const Hero = () => {
   const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
   const [isDarkMode, setIsDarkMode] = useState(false);
 
   useEffect(() => {
@@ -66,7 +67,7 @@ export const Hero = () => {
                 <Button 
                   size="lg" 
                   className="text-lg hover-scale dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
-                  onClick={() => window.location.href = "/dashboard"}
+                  onClick={() => navigate("/dashboard")}
                 >
                   Go to Dashboard <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>

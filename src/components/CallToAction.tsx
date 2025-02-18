@@ -2,9 +2,11 @@
 import { Button } from "@/components/ui/button";
 import { AuthForm } from "./AuthForm";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 export const CallToAction = () => {
   const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
 
   return (
     <section className="hero-gradient py-20">
@@ -19,7 +21,7 @@ export const CallToAction = () => {
           <Button 
             size="lg" 
             className="text-lg"
-            onClick={() => window.location.href = "/dashboard"}
+            onClick={() => navigate("/dashboard")}
           >
             Go to Dashboard
           </Button>
