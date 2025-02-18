@@ -13,12 +13,26 @@ export function RegisterForm() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [passwordError, setPasswordError] = useState("");
   const { toast } = useToast();
   const { login } = useAuth();
   const navigate = useNavigate();
 
+  const validatePassword = (value: string) => {
+    setPassword(value);
+    if (value.length < 6) {
+      setPasswordError("Password must be at least 6 characters long");
+    } else {
+      setPasswordError("");
+    }
+  };
+
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (password.length < 6) {
+      return; // Form won't submit if password is too short
+    }
+    
     setIsLoading(true);
 
     try {
@@ -67,11 +81,14 @@ export function RegisterForm() {
           type="password"
           placeholder="Create a password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => validatePassword(e.target.value)}
           required
         />
+        {passwordError && (
+          <p className="text-sm text-destructive">{passwordError}</p>
+        )}
       </div>
-      <Button type="submit" className="w-full" disabled={isLoading}>
+      <Button type="submit" className="w-full" disabled={isLoading || !!passwordError}>
         {isLoading ? "Loading..." : "Create Account"}
       </Button>
     </form>

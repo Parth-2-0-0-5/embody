@@ -8,17 +8,27 @@ export const signUpUser = async (
   username: string,
   toast: (props: ToastProps) => void
 ) => {
+  // Validate password length
+  if (password.length < 6) {
+    toast({
+      title: "Error",
+      description: "Password must be at least 6 characters long",
+      variant: "destructive",
+    });
+    return null;
+  }
+
   // First check if username already exists
   const { data: existingUser, error: usernameError } = await supabase
     .from('profiles')
     .select('username')
     .eq('username', username)
-    .single();
+    .maybeSingle();
 
   if (existingUser) {
     toast({
       title: "Error",
-      children: "Username already taken. Please choose another username.",
+      description: "Username already taken. Please choose another username.",
       variant: "destructive",
     });
     return null;
@@ -39,13 +49,13 @@ export const signUpUser = async (
     if (authError.message.includes("User already registered")) {
       toast({
         title: "Error",
-        children: "This email is already registered. Please try logging in instead.",
+        description: "This email is already registered. Please try logging in instead.",
         variant: "destructive",
       });
     } else {
       toast({
         title: "Error",
-        children: authError.message,
+        description: authError.message,
         variant: "destructive",
       });
     }
@@ -67,10 +77,19 @@ export const signInUser = async (
     .eq('username', username)
     .maybeSingle();
 
-  if (!profileData || profileError) {
+  if (!profileData) {
     toast({
       title: "Error",
-      children: "Username not found",
+      description: "Username not found. Please check your username and try again.",
+      variant: "destructive",
+    });
+    return null;
+  }
+
+  if (profileError) {
+    toast({
+      title: "Error",
+      description: "An error occurred while finding your account. Please try again.",
       variant: "destructive",
     });
     return null;
@@ -85,7 +104,7 @@ export const signInUser = async (
   if (error) {
     toast({
       title: "Error",
-      children: error.message,
+      description: "Invalid password. Please try again.",
       variant: "destructive",
     });
     return null;
@@ -93,4 +112,3 @@ export const signInUser = async (
 
   return data.user;
 };
-
