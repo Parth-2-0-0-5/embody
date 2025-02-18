@@ -41,7 +41,7 @@ export function RegisterForm() {
         login(user.email!, user.id);
         toast({
           title: "Success",
-          description: "Account created successfully!",
+          children: "Account created successfully!",
         });
         navigate("/dashboard");
       }

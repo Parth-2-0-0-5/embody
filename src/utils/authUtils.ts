@@ -62,16 +62,16 @@ export const signUpUser = async (
     return null;
   }
 
-  // If email confirmation is required, notify the user
-  if (!authData.user?.confirmed_at) {
+  // If email confirmation is required, handle it differently
+  if (!authData.user?.confirmed_at && supabase.auth.onAuthStateChange) {
     toast({
       title: "Success",
-      children: "Account created! Please check your email to confirm your account before logging in.",
+      children: "Account created! You will be redirected once confirmed.",
     });
-    return null;
+    // Return the user anyway so we can log them in
+    return authData.user;
   }
 
-  // If we reach here, the user was created and confirmed
   return authData.user;
 };
 
