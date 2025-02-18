@@ -62,6 +62,15 @@ export const signUpUser = async (
     return null;
   }
 
+  // Check if email confirmation is required
+  if (!authData.user?.confirmed_at) {
+    toast({
+      title: "Success",
+      children: "Please check your email to confirm your account before logging in.",
+    });
+    return null;
+  }
+
   return authData.user;
 };
 
@@ -102,11 +111,19 @@ export const signInUser = async (
   });
 
   if (error) {
-    toast({
-      title: "Error",
-      children: "Invalid password. Please try again.",
-      variant: "destructive",
-    });
+    if (error.message.includes("Email not confirmed")) {
+      toast({
+        title: "Error",
+        children: "Please confirm your email address before logging in. Check your inbox for the confirmation link.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Error",
+        children: "Invalid password. Please try again.",
+        variant: "destructive",
+      });
+    }
     return null;
   }
 
