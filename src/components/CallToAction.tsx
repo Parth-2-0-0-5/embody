@@ -24,7 +24,18 @@ export const CallToAction = () => {
             Go to Dashboard
           </Button>
         ) : (
-          <AuthForm />
+          <Button
+            size="lg"
+            className="text-lg"
+            onClick={() => {
+              const authButton = document.querySelector('[aria-label="Sign In / Sign Up"]') as HTMLButtonElement;
+              if (authButton) {
+                authButton.click();
+              }
+            }}
+          >
+            Start Your Journey Today
+          </Button>
         )}
       </div>
     </section>

@@ -71,7 +71,18 @@ export const Hero = () => {
                   Go to Dashboard <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
               ) : (
-                <AuthForm />
+                <Button 
+                  size="lg" 
+                  className="text-lg hover-scale dark:bg-white dark:text-gray-900 dark:hover:bg-gray-200"
+                  onClick={() => {
+                    const authButton = document.querySelector('[aria-label="Sign In / Sign Up"]') as HTMLButtonElement;
+                    if (authButton) {
+                      authButton.click();
+                    }
+                  }}
+                >
+                  Start Your Journey <ArrowRight className="ml-2 h-5 w-5" />
+                </Button>
               )}
             </motion.div>
           </motion.div>

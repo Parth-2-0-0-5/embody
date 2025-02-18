@@ -9,7 +9,7 @@ export function AuthForm() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="default">Sign In / Sign Up</Button>
+        <Button variant="default" aria-label="Sign In / Sign Up">Sign In / Sign Up</Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
