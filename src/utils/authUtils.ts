@@ -62,15 +62,16 @@ export const signUpUser = async (
     return null;
   }
 
-  // Check if email confirmation is required
+  // If email confirmation is required, notify the user
   if (!authData.user?.confirmed_at) {
     toast({
       title: "Success",
-      children: "Please check your email to confirm your account before logging in.",
+      children: "Account created! Please check your email to confirm your account before logging in.",
     });
     return null;
   }
 
+  // If we reach here, the user was created and confirmed
   return authData.user;
 };
 
@@ -120,7 +121,7 @@ export const signInUser = async (
     } else {
       toast({
         title: "Error",
-        children: "Invalid password. Please try again.",
+        children: "Invalid credentials. Please check your username and password.",
         variant: "destructive",
       });
     }
