@@ -1,3 +1,4 @@
+
 import React from "react";
 import {
   Card,
@@ -11,7 +12,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, BarChart, Bar } from "recharts";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
 
 interface BaseMetrics {
   [key: string]: string;
@@ -41,21 +42,14 @@ export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) 
     { date: '2024-01-05', recovery: calculateRecoveryPercentage(), health: calculateHealthPercentage() },
   ];
 
-  // Current metrics for bar chart
-  const currentMetrics = Object.entries(metrics).map(([name, value]) => ({
-    name: name.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()),
-    value: parseInt(value)
-  }));
-
   return (
     <Card>
       <CardHeader>
         <CardTitle>Your Progress</CardTitle>
-        <CardDescription>Metrics Overview</CardDescription>
+        <CardDescription>Historical Trends</CardDescription>
       </CardHeader>
-      <CardContent className="grid gap-12">
-        <div className="h-[300px]">
-          <CardTitle className="mb-4">Historical Trends</CardTitle>
+      <CardContent>
+        <div className="h-[400px]">
           <ChartContainer
             config={{
               recovery: { color: "#22c55e" },
@@ -83,24 +77,6 @@ export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) 
                 strokeWidth={2}
               />
             </LineChart>
-          </ChartContainer>
-        </div>
-
-        <div className="h-[300px]">
-          <CardTitle className="mb-4">Current Metrics</CardTitle>
-          <ChartContainer
-            config={{
-              metrics: { color: "#3b82f6" },
-            }}
-          >
-            <BarChart data={currentMetrics}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
-              <YAxis domain={[0, 10]} />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="value" fill="#3b82f6" name="Score" />
-            </BarChart>
           </ChartContainer>
         </div>
       </CardContent>
