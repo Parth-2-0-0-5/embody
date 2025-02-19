@@ -9,7 +9,7 @@ import { SessionContextProvider } from '@supabase/auth-helpers-react';
 import Index from "./pages/Index";
 import Recovery from "./pages/Recovery";
 import Dashboard from "./pages/Dashboard";
-import WaterTracking from "./pages/WaterTracking";
+import MentalHealthTracking from "./pages/MentalHealthTracking";
 import ExerciseTracking from "./pages/ExerciseTracking";
 import SleepTracking from "./pages/SleepTracking";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -57,9 +57,9 @@ const App: React.FC = () => {
                       <Dashboard />
                     </ProtectedRoute>
                   } />
-                  <Route path="/water-tracking" element={
+                  <Route path="/mental-health" element={
                     <ProtectedRoute>
-                      <WaterTracking />
+                      <MentalHealthTracking />
                     </ProtectedRoute>
                   } />
                   <Route path="/exercise-tracking" element={
