@@ -6,7 +6,7 @@ import { Testimonials } from "@/components/Testimonials";
 import { CallToAction } from "@/components/CallToAction";
 import { Footer } from "@/components/Footer";
 import { Card } from "@/components/ui/card";
-import { Brain, Dumbbell, Moon } from "lucide-react";
+import { Brain, Dumbbell, Moon, Star, Heart, Shield, Users, Clock, Zap } from "lucide-react";
 
 const Index = () => {
   return (
@@ -62,10 +62,80 @@ const Index = () => {
         </div>
       </section>
 
+      <section className="py-20 bg-gradient-to-b from-white/0 to-primary/5 dark:from-gray-900 dark:to-gray-800">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-16 dark:text-white">
+            Why Choose Embody?
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[
+              {
+                icon: <Star className="w-6 h-6 text-yellow-500" />,
+                title: "Expert Guidance",
+                description: "Get personalized recommendations from health professionals"
+              },
+              {
+                icon: <Heart className="w-6 h-6 text-red-500" />,
+                title: "Holistic Approach",
+                description: "Focus on both physical and mental well-being"
+              },
+              {
+                icon: <Shield className="w-6 h-6 text-green-500" />,
+                title: "Data Security",
+                description: "Your health data is encrypted and secure"
+              },
+              {
+                icon: <Users className="w-6 h-6 text-blue-500" />,
+                title: "Community Support",
+                description: "Connect with others on similar health journeys"
+              },
+              {
+                icon: <Clock className="w-6 h-6 text-purple-500" />,
+                title: "24/7 Monitoring",
+                description: "Track your progress anytime, anywhere"
+              },
+              {
+                icon: <Zap className="w-6 h-6 text-orange-500" />,
+                title: "AI-Powered Insights",
+                description: "Get intelligent health insights and predictions"
+              }
+            ].map((feature, index) => (
+              <Card key={index} className="p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 dark:bg-gray-700/50">
+                <div className="flex items-center gap-4 mb-4">
+                  <div className="p-3 bg-white/80 dark:bg-gray-600/50 rounded-full">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-xl font-semibold dark:text-white">{feature.title}</h3>
+                </div>
+                <p className="text-muted-foreground dark:text-gray-300">
+                  {feature.description}
+                </p>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
       <div id="testimonials">
         <Testimonials />
       </div>
       
+      <section className="py-20 bg-white/50 dark:bg-gray-800/50">
+        <div className="container mx-auto px-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 dark:text-white">
+            Our Commitment to Your Health
+          </h2>
+          <div className="max-w-3xl mx-auto text-center">
+            <p className="text-lg text-muted-foreground dark:text-gray-300 mb-8">
+              At Embody, we believe in a comprehensive approach to health and wellness. Our platform is designed to support you throughout your journey to better health, whether you're recovering from an injury, managing stress, or working to improve your overall well-being.
+            </p>
+            <p className="text-lg text-muted-foreground dark:text-gray-300">
+              With advanced tracking tools, personalized insights, and a supportive community, we're here to help you achieve your health goals and maintain a balanced lifestyle.
+            </p>
+          </div>
+        </div>
+      </section>
+
       <div id="contact" className="py-20 bg-white/50 dark:bg-gray-800/50">
         <div className="container mx-auto px-6 text-center">
           <h2 className="text-3xl md:text-4xl font-bold mb-8 dark:text-white">Get in Touch</h2>
@@ -73,12 +143,12 @@ const Index = () => {
             Have questions about your recovery journey? Our team is here to help you every step of the way.
           </p>
           <div className="flex justify-center gap-4">
-            <a href="mailto:support@embody.com" className="text-primary hover:underline dark:text-blue-400">
-              support@embody.com
+            <a href="mailto:pa241@snu.edu.in" className="text-primary hover:underline dark:text-blue-400">
+              pa241@snu.edu.in
             </a>
             <span className="text-muted-foreground dark:text-gray-400">|</span>
-            <a href="tel:+1234567890" className="text-primary hover:underline dark:text-blue-400">
-              (123) 456-7890
+            <a href="tel:+919354287664" className="text-primary hover:underline dark:text-blue-400">
+              +91 9354287664
             </a>
           </div>
         </div>
