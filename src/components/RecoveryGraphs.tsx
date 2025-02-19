@@ -1,5 +1,5 @@
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -13,47 +13,65 @@ import {
   ChartTooltipContent,
 } from "@/components/ui/chart";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from "recharts";
+import { submitMetricsToML, getHistoricalMetrics } from "@/utils/mlIntegration";
+import { toast } from "sonner";
 
 interface BaseMetrics {
   [key: string]: string;
 }
 
 export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) => {
-  const calculateRecoveryPercentage = () => {
-    // Calculate average of first three metrics
-    const values = Object.values(metrics);
-    const firstThreeAverage = values.slice(0, 3).reduce((acc, curr) => acc + parseInt(curr), 0) / 3;
-    return Math.round(firstThreeAverage * 10);
-  };
+  const [historicalData, setHistoricalData] = useState<any[]>([]);
 
-  const calculateHealthPercentage = () => {
-    // Calculate average of last three metrics
-    const values = Object.values(metrics);
-    const lastThreeAverage = values.slice(3, 6).reduce((acc, curr) => acc + parseInt(curr), 0) / 3;
-    return Math.round(lastThreeAverage * 10);
-  };
+  useEffect(() => {
+    const processMetrics = async () => {
+      try {
+        // Calculate current metrics
+        const currentMetrics = {
+          physical_recovery: parseFloat(metrics.painLevel) + parseFloat(metrics.mobilityLevel) + parseFloat(metrics.fatigueLevel),
+          mental_health: parseFloat(metrics.stressLevel) + parseFloat(metrics.moodLevel) + parseFloat(metrics.anxietyLevel),
+          overall_health: parseFloat(metrics.sleepQuality) + parseFloat(metrics.dietaryHabits),
+        };
 
-  // Sample historical data
-  const historicalData = [
-    { date: '2024-01-01', recovery: 65, health: 70 },
-    { date: '2024-01-02', recovery: 68, health: 72 },
-    { date: '2024-01-03', recovery: 72, health: 75 },
-    { date: '2024-01-04', recovery: 70, health: 78 },
-    { date: '2024-01-05', recovery: calculateRecoveryPercentage(), health: calculateHealthPercentage() },
-  ];
+        // Submit to ML model and get prediction
+        await submitMetricsToML(currentMetrics);
+        
+        // Fetch updated historical data
+        const history = await getHistoricalMetrics();
+        
+        // Transform data for chart
+        const chartData = history.map(record => ({
+          date: new Date(record.created_at).toLocaleDateString(),
+          physical: record.physical_recovery,
+          mental: record.mental_health,
+          overall: record.overall_health,
+        }));
+
+        setHistoricalData(chartData);
+      } catch (error) {
+        console.error('Error processing metrics:', error);
+        toast.error('Failed to process health metrics');
+      }
+    };
+
+    if (Object.values(metrics).every(value => value !== '')) {
+      processMetrics();
+    }
+  }, [metrics]);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Your Progress</CardTitle>
-        <CardDescription>Historical Trends</CardDescription>
+        <CardTitle>Your Health Progress</CardTitle>
+        <CardDescription>AI-Powered Health Analysis</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="h-[400px]">
           <ChartContainer
             config={{
-              recovery: { color: "#22c55e" },
-              health: { color: "#3b82f6" },
+              physical: { color: "#22c55e" },
+              mental: { color: "#8b5cf6" },
+              overall: { color: "#3b82f6" },
             }}
           >
             <LineChart data={historicalData}>
@@ -64,16 +82,23 @@ export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) 
               <Legend />
               <Line
                 type="monotone"
-                dataKey="recovery"
+                dataKey="physical"
                 stroke="#22c55e"
-                name="Recovery"
+                name="Physical Health"
                 strokeWidth={2}
               />
               <Line
                 type="monotone"
-                dataKey="health"
+                dataKey="mental"
+                stroke="#8b5cf6"
+                name="Mental Health"
+                strokeWidth={2}
+              />
+              <Line
+                type="monotone"
+                dataKey="overall"
                 stroke="#3b82f6"
-                name="Health"
+                name="Overall Health"
                 strokeWidth={2}
               />
             </LineChart>

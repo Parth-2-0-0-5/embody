@@ -1,3 +1,4 @@
+
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Features } from "@/components/Features";
@@ -5,7 +6,7 @@ import { Testimonials } from "@/components/Testimonials";
 import { CallToAction } from "@/components/CallToAction";
 import { Footer } from "@/components/Footer";
 import { Card } from "@/components/ui/card";
-import { Droplets, Dumbbell, Moon } from "lucide-react";
+import { Brain, Dumbbell, Moon } from "lucide-react";
 
 const Index = () => {
   return (
@@ -19,18 +20,18 @@ const Index = () => {
       <section className="py-20 bg-white/50 dark:bg-gray-800/50">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 dark:text-white">
-            Daily Health Tracking
+            Holistic Health Tracking
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 dark:bg-gray-700/50">
               <div className="flex items-center gap-4 mb-4">
-                <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-full">
-                  <Droplets className="w-6 h-6 text-blue-500" />
+                <div className="p-3 bg-purple-100 dark:bg-purple-900/50 rounded-full">
+                  <Brain className="w-6 h-6 text-purple-500" />
                 </div>
-                <h3 className="text-xl font-semibold dark:text-white">Water Tracking</h3>
+                <h3 className="text-xl font-semibold dark:text-white">Mental Health</h3>
               </div>
               <p className="text-muted-foreground dark:text-gray-300">
-                Monitor your daily hydration levels, set water intake goals, and track your progress throughout the day.
+                Track your mental well-being, stress levels, and emotional state with our AI-powered analysis.
               </p>
             </Card>
             
@@ -48,8 +49,8 @@ const Index = () => {
             
             <Card className="p-6 hover:shadow-lg transition-all duration-300 hover:-translate-y-1 dark:bg-gray-700/50">
               <div className="flex items-center gap-4 mb-4">
-                <div className="p-3 bg-purple-100 dark:bg-purple-900/50 rounded-full">
-                  <Moon className="w-6 h-6 text-purple-500" />
+                <div className="p-3 bg-blue-100 dark:bg-blue-900/50 rounded-full">
+                  <Moon className="w-6 h-6 text-blue-500" />
                 </div>
                 <h3 className="text-xl font-semibold dark:text-white">Sleep Tracking</h3>
               </div>

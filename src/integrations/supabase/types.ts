@@ -9,6 +9,36 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      health_metrics: {
+        Row: {
+          created_at: string | null
+          id: string
+          mental_health: number | null
+          ml_prediction: Json | null
+          overall_health: number | null
+          physical_recovery: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          mental_health?: number | null
+          ml_prediction?: Json | null
+          overall_health?: number | null
+          physical_recovery?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          mental_health?: number | null
+          ml_prediction?: Json | null
+          overall_health?: number | null
+          physical_recovery?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           created_at: string
