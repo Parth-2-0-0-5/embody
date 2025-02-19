@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Activity, Droplets, Dumbbell, LineChart, Moon } from "lucide-react";
+import { Activity, Brain, Dumbbell, LineChart, Moon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { SharedHeader } from "@/components/SharedHeader";
 import { Footer } from "@/components/Footer";
@@ -53,10 +53,10 @@ const Dashboard = () => {
       link: "/recovery"
     },
     {
-      title: "Water Intake",
-      description: "Track your hydration levels",
-      icon: <Droplets className="w-8 h-8 text-cyan-500 icon-float" />,
-      link: "/water-tracking"
+      title: "Mental Health",
+      description: "Track your mental well-being",
+      icon: <Brain className="w-8 h-8 text-purple-500 icon-float" />,
+      link: "/mental-health"
     },
     {
       title: "Exercise Time",
@@ -67,7 +67,7 @@ const Dashboard = () => {
     {
       title: "Sleep Quality",
       description: "Track your sleep patterns",
-      icon: <Moon className="w-8 h-8 text-purple-500 icon-float" />,
+      icon: <Moon className="w-8 h-8 text-indigo-500 icon-float" />,
       link: "/sleep-tracking"
     }
   ];
