@@ -1,3 +1,4 @@
+
 .hero-gradient {
   background: linear-gradient(to right, #accbee 0%, #e7f0fd 100%);
 }
@@ -16,7 +17,7 @@
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: difference;
-  transition: width 0.2s ease, height 0.2s ease, border-radius 0.2s ease;
+  transition: transform 0.2s ease;
 }
 
 .dark .custom-cursor {
@@ -24,29 +25,15 @@
 }
 
 .cursor-hover {
-  width: 40px;
-  height: 40px;
-}
-
-.cursor-fast {
-  width: 25px;
-  height: 20px;
-  border-radius: 35%;
-}
-
-.cursor-medium {
-  width: 22px;
-  height: 20px;
-  border-radius: 40%;
+  transform: scale(2);
 }
 
 body {
-  scroll-behavior: smooth !important;
-  scroll-timeline: 2.5s cubic-bezier(0.65, 0, 0.35, 1) !important;
+  cursor: none;
 }
 
 a, button, [role="button"], input, select, textarea {
-  /* Remove cursor: none to show default cursor */
+  cursor: none;
 }
 
 /* Keep existing animations */
@@ -149,3 +136,4 @@ html {
   opacity: 1;
   transform: translateY(0);
 }
+
