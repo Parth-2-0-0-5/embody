@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useRef } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -33,19 +34,21 @@ const CustomCursor = () => {
 
   useEffect(() => {
     const updateCursorPosition = (e: MouseEvent) => {
-      const currentTime = Date.now();
-      const timeDiff = currentTime - lastTime.current;
-      
-      const dx = e.clientX - lastPosition.current.x;
-      const dy = e.clientY - lastPosition.current.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      const currentSpeed = distance / timeDiff;
-      
-      setSpeed(currentSpeed);
-      setPosition({ x: e.clientX, y: e.clientY });
-      
-      lastPosition.current = { x: e.clientX, y: e.clientY };
-      lastTime.current = currentTime;
+      requestAnimationFrame(() => {
+        const currentTime = Date.now();
+        const timeDiff = Math.max(1, currentTime - lastTime.current);
+        
+        const dx = e.clientX - lastPosition.current.x;
+        const dy = e.clientY - lastPosition.current.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const currentSpeed = distance / timeDiff;
+        
+        setSpeed(currentSpeed);
+        setPosition({ x: e.clientX, y: e.clientY });
+        
+        lastPosition.current = { x: e.clientX, y: e.clientY };
+        lastTime.current = currentTime;
+      });
     };
 
     const handleMouseOver = (e: MouseEvent) => {

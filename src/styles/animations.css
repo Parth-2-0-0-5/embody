@@ -1,4 +1,3 @@
-
 .hero-gradient {
   background: linear-gradient(to right, #accbee 0%, #e7f0fd 100%);
 }
@@ -39,12 +38,14 @@
   transform: scaleX(1.2) !important;
 }
 
+/* Remove cursor: none to show default cursor */
 body {
-  cursor: none;
+  scroll-behavior: smooth !important;
+  scroll-timeline: 2.5s cubic-bezier(0.65, 0, 0.35, 1) !important;
 }
 
 a, button, [role="button"], input, select, textarea {
-  cursor: none;
+  /* Remove cursor: none to show default cursor */
 }
 
 /* Keep existing animations */
@@ -147,4 +148,3 @@ html {
   opacity: 1;
   transform: translateY(0);
 }
-
