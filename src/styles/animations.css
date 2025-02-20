@@ -17,7 +17,7 @@
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: difference;
-  transition: transform 0.2s ease;
+  transition: all 0.1s linear;
 }
 
 .dark .custom-cursor {
@@ -25,7 +25,18 @@
 }
 
 .cursor-hover {
-  transform: scale(2);
+  transform: scale(2) !important;
+  transition: all 0.2s ease-out;
+}
+
+.cursor-fast {
+  border-radius: 35% !important;
+  transform: scaleX(1.5) rotate(25deg) !important;
+}
+
+.cursor-medium {
+  border-radius: 40%;
+  transform: scaleX(1.2) !important;
 }
 
 body {
