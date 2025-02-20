@@ -34,22 +34,21 @@ const CustomCursor = () => {
 
   useEffect(() => {
     const updateCursorPosition = (e: MouseEvent) => {
-      // Set the cursor position directly from mouse coordinates
-      setPosition({ x: e.clientX, y: e.clientY });
-      
-      // Calculate speed for shape changes
-      const currentTime = Date.now();
-      const timeDiff = Math.max(1, currentTime - lastTime.current);
-      
-      const dx = e.clientX - lastPosition.current.x;
-      const dy = e.clientY - lastPosition.current.y;
-      const distance = Math.sqrt(dx * dx + dy * dy);
-      const currentSpeed = distance / timeDiff;
-      
-      setSpeed(currentSpeed);
-      
-      lastPosition.current = { x: e.clientX, y: e.clientY };
-      lastTime.current = currentTime;
+      requestAnimationFrame(() => {
+        const currentTime = Date.now();
+        const timeDiff = Math.max(1, currentTime - lastTime.current);
+        
+        const dx = e.clientX - lastPosition.current.x;
+        const dy = e.clientY - lastPosition.current.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        const currentSpeed = distance / timeDiff;
+        
+        setSpeed(currentSpeed);
+        setPosition({ x: e.clientX, y: e.clientY });
+        
+        lastPosition.current = { x: e.clientX, y: e.clientY };
+        lastTime.current = currentTime;
+      });
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -90,9 +89,8 @@ const CustomCursor = () => {
     <div 
       className={`custom-cursor ${getCursorClass()}`}
       style={{
-        left: `${position.x}px`,
-        top: `${position.y}px`,
-        transform: 'translate(-50%, -50%)'
+        transform: `translate(${position.x - 10}px, ${position.y - 10}px)`,
+        transition: speed > 1 ? 'transform 0.05s linear' : 'transform 0.15s ease-out'
       }}
     />
   );
