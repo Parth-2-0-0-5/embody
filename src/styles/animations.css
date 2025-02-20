@@ -16,7 +16,7 @@
   pointer-events: none;
   z-index: 9999;
   mix-blend-mode: difference;
-  transition: all 0.1s linear;
+  transition: width 0.2s ease, height 0.2s ease, border-radius 0.2s ease;
 }
 
 .dark .custom-cursor {
@@ -24,21 +24,22 @@
 }
 
 .cursor-hover {
-  transform: scale(2) !important;
-  transition: all 0.2s ease-out;
+  width: 40px;
+  height: 40px;
 }
 
 .cursor-fast {
-  border-radius: 35% !important;
-  transform: scaleX(1.5) rotate(25deg) !important;
+  width: 25px;
+  height: 20px;
+  border-radius: 35%;
 }
 
 .cursor-medium {
+  width: 22px;
+  height: 20px;
   border-radius: 40%;
-  transform: scaleX(1.2) !important;
 }
 
-/* Remove cursor: none to show default cursor */
 body {
   scroll-behavior: smooth !important;
   scroll-timeline: 2.5s cubic-bezier(0.65, 0, 0.35, 1) !important;
