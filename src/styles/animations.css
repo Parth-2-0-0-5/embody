@@ -7,6 +7,36 @@
   background: linear-gradient(to right, #1a1f2c 0%, #221f26 100%);
 }
 
+/* Custom Cursor Styles */
+.custom-cursor {
+  width: 20px;
+  height: 20px;
+  background-color: #000;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: difference;
+  transition: transform 0.2s ease;
+}
+
+.dark .custom-cursor {
+  background-color: #fff;
+}
+
+.cursor-hover {
+  transform: scale(2);
+}
+
+body {
+  cursor: none;
+}
+
+a, button, [role="button"], input, select, textarea {
+  cursor: none;
+}
+
+/* Keep existing animations */
 .feature-card {
   @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
 }

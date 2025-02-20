@@ -1,5 +1,5 @@
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -25,6 +25,52 @@ const queryClient = new QueryClient({
   },
 });
 
+const CustomCursor = () => {
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [isHovering, setIsHovering] = useState(false);
+
+  useEffect(() => {
+    const updateCursorPosition = (e: MouseEvent) => {
+      setPosition({ x: e.clientX, y: e.clientY });
+    };
+
+    const handleMouseOver = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName.toLowerCase() === 'a' || 
+          target.tagName.toLowerCase() === 'button' ||
+          target.closest('[role="button"]') ||
+          target.tagName.toLowerCase() === 'input' ||
+          target.tagName.toLowerCase() === 'select' ||
+          target.tagName.toLowerCase() === 'textarea') {
+        setIsHovering(true);
+      }
+    };
+
+    const handleMouseOut = () => {
+      setIsHovering(false);
+    };
+
+    window.addEventListener('mousemove', updateCursorPosition);
+    document.addEventListener('mouseover', handleMouseOver);
+    document.addEventListener('mouseout', handleMouseOut);
+
+    return () => {
+      window.removeEventListener('mousemove', updateCursorPosition);
+      document.removeEventListener('mouseover', handleMouseOver);
+      document.removeEventListener('mouseout', handleMouseOut);
+    };
+  }, []);
+
+  return (
+    <div 
+      className={`custom-cursor ${isHovering ? 'cursor-hover' : ''}`}
+      style={{
+        transform: `translate(${position.x - 10}px, ${position.y - 10}px)`,
+      }}
+    />
+  );
+};
+
 const App: React.FC = () => {
   useEffect(() => {
     const isDarkMode = localStorage.getItem('darkMode') === 'true';
@@ -43,6 +89,7 @@ const App: React.FC = () => {
           <SessionContextProvider supabaseClient={supabase}>
             <AuthProvider>
               <TooltipProvider>
+                <CustomCursor />
                 <Toaster />
                 <Sonner />
                 <Routes>
