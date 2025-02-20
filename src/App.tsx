@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -28,10 +28,28 @@ const queryClient = new QueryClient({
 const CustomCursor = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [isHovering, setIsHovering] = useState(false);
+  const [speed, setSpeed] = useState(0);
+  const lastPosition = useRef({ x: 0, y: 0 });
+  const lastTime = useRef(Date.now());
 
   useEffect(() => {
     const updateCursorPosition = (e: MouseEvent) => {
+      // Set the cursor position directly from mouse coordinates
       setPosition({ x: e.clientX, y: e.clientY });
+      
+      // Calculate speed for shape changes
+      const currentTime = Date.now();
+      const timeDiff = Math.max(1, currentTime - lastTime.current);
+      
+      const dx = e.clientX - lastPosition.current.x;
+      const dy = e.clientY - lastPosition.current.y;
+      const distance = Math.sqrt(dx * dx + dy * dy);
+      const currentSpeed = distance / timeDiff;
+      
+      setSpeed(currentSpeed);
+      
+      lastPosition.current = { x: e.clientX, y: e.clientY };
+      lastTime.current = currentTime;
     };
 
     const handleMouseOver = (e: MouseEvent) => {
@@ -61,11 +79,20 @@ const CustomCursor = () => {
     };
   }, []);
 
+  const getCursorClass = () => {
+    if (isHovering) return 'cursor-hover';
+    if (speed > 1) return 'cursor-fast';
+    if (speed > 0.5) return 'cursor-medium';
+    return '';
+  };
+
   return (
     <div 
-      className={`custom-cursor ${isHovering ? 'cursor-hover' : ''}`}
+      className={`custom-cursor ${getCursorClass()}`}
       style={{
-        transform: `translate(${position.x - 10}px, ${position.y - 10}px)`,
+        left: `${position.x}px`,
+        top: `${position.y}px`,
+        transform: 'translate(-50%, -50%)'
       }}
     />
   );
