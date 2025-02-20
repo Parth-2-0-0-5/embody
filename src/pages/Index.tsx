@@ -1,4 +1,3 @@
-
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Features } from "@/components/Features";
@@ -7,8 +6,31 @@ import { CallToAction } from "@/components/CallToAction";
 import { Footer } from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Brain, Dumbbell, Moon, Star, Heart, Shield, Users, Clock, Zap } from "lucide-react";
+import React from "react";
+import { motion } from "framer-motion";
 
 const Index = () => {
+  React.useEffect(() => {
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(observerCallback, {
+      threshold: 0.1,
+      rootMargin: '20px'
+    });
+
+    document.querySelectorAll('.fade-up, .slide-in, .image-fade, .section-transition').forEach(el => {
+      observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="min-h-screen">
       <Header />
@@ -17,6 +39,76 @@ const Index = () => {
         <Features />
       </div>
       
+      <section className="py-20 bg-white/50 dark:bg-gray-800/50">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+            <motion.div 
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="fade-up"
+            >
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">
+                Expert Care and Guidance
+              </h2>
+              <p className="text-lg text-muted-foreground dark:text-gray-300 mb-4">
+                Our team of healthcare professionals provides personalized care and guidance throughout your recovery journey. We understand that each patient's needs are unique, and we tailor our approach accordingly.
+              </p>
+              <p className="text-lg text-muted-foreground dark:text-gray-300">
+                Regular consultations and progress monitoring ensure you're on the right path to recovery.
+              </p>
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="image-fade rounded-xl overflow-hidden shadow-xl"
+            >
+              <img 
+                src="/lovable-uploads/50b5a2ea-fcff-4258-a137-3fa7db69fe87.png"
+                alt="Healthcare consultation"
+                className="w-full h-auto object-cover"
+              />
+            </motion.div>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="image-fade rounded-xl overflow-hidden shadow-xl lg:order-2"
+            >
+              <img 
+                src="/lovable-uploads/de649357-0967-49bc-a8b8-e26665b54cdb.png"
+                alt="Medical professional examining results"
+                className="w-full h-auto object-cover"
+              />
+            </motion.div>
+            <motion.div 
+              initial={{ opacity: 0, x: 20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="fade-up lg:order-1"
+            >
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">
+                Comprehensive Health Analysis
+              </h2>
+              <p className="text-lg text-muted-foreground dark:text-gray-300 mb-4">
+                We utilize advanced medical imaging and diagnostic tools to provide accurate assessments of your health condition. Our experienced professionals analyze the results to create targeted recovery plans.
+              </p>
+              <p className="text-lg text-muted-foreground dark:text-gray-300">
+                Regular monitoring and adjustments ensure optimal recovery outcomes for every patient.
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       <section className="py-20 bg-white/50 dark:bg-gray-800/50">
         <div className="container mx-auto px-6">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-12 dark:text-white">

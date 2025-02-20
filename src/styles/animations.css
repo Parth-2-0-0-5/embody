@@ -1,3 +1,4 @@
+
 .hero-gradient {
   background: linear-gradient(to right, #accbee 0%, #e7f0fd 100%);
 }
@@ -47,20 +48,62 @@
   100% { transform: translateY(0px); }
 }
 
-.wave-animation {
-  background: linear-gradient(45deg, #4a90e2, #63b3ed);
-  opacity: 0.1;
+.fade-up {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-.dark .wave-animation {
-  background: linear-gradient(45deg, #2d3748, #1a202c);
+.fade-up.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.wave-animation-alt {
-  background: linear-gradient(-45deg, #4a90e2, #63b3ed);
-  opacity: 0.1;
+.slide-in {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-.dark .wave-animation-alt {
-  background: linear-gradient(-45deg, #2d3748, #1a202c);
+.slide-in.visible {
+  opacity: 1;
+  transform: translateX(0);
 }
+
+.image-fade {
+  opacity: 0;
+  transform: scale(0.95);
+  transition: all 0.8s ease-out;
+}
+
+.image-fade.visible {
+  opacity: 1;
+  transform: scale(1);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.section-transition {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.8s ease-out;
+}
+
+.section-transition.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.stagger-animation > * {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.5s ease-out;
+}
+
+.stagger-animation > *.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
