@@ -1,8 +1,7 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { Database } from "@/integrations/supabase/types";
 
-// Define base types
+// Define simple, flat types without complex nesting
 type HealthMetrics = {
   physical_recovery: number;
   mental_health: number;
@@ -15,8 +14,8 @@ type MLPrediction = {
   score: number;
 };
 
-// Simplified database type without type recursion
-type DatabaseHealthMetrics = {
+// Flatten the database type completely
+type HealthMetricsRecord = {
   id: string;
   created_at: string | null;
   user_id: string | null;
@@ -58,11 +57,11 @@ export async function submitMetricsToML(metrics: HealthMetrics, userId: string) 
 export async function getHistoricalMetrics(
   userId: string, 
   calculatorType: 'physical' | 'mental'
-): Promise<DatabaseHealthMetrics[]> {
+): Promise<HealthMetricsRecord[]> {
   try {
     const { data, error } = await supabase
       .from('health_metrics')
-      .select('*')
+      .select()
       .eq('user_id', userId)
       .eq('calculator_type', calculatorType)
       .order('created_at', { ascending: false })
@@ -70,8 +69,8 @@ export async function getHistoricalMetrics(
 
     if (error) throw error;
 
-    // Safely transform the data with explicit typing
-    const transformedData: DatabaseHealthMetrics[] = (data || []).map(record => ({
+    // Transform the data with basic type assertions
+    return (data || []).map(record => ({
       id: record.id || '',
       created_at: record.created_at,
       user_id: record.user_id,
@@ -81,8 +80,6 @@ export async function getHistoricalMetrics(
       ml_prediction: record.ml_prediction as MLPrediction,
       calculator_type: calculatorType
     }));
-
-    return transformedData;
   } catch (error) {
     console.error('Error fetching historical metrics:', error);
     throw error;
