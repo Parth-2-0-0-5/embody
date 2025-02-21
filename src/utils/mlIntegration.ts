@@ -53,7 +53,7 @@ export async function submitMetricsToML(metrics: HealthMetrics, userId: string) 
 
 export async function getHistoricalMetrics(userId: string, calculatorType: 'physical' | 'mental'): Promise<StoredHealthMetrics[]> {
   try {
-    const { data, error } = await supabase
+    const { data: rawData, error } = await supabase
       .from('health_metrics')
       .select('*')
       .eq('user_id', userId)
@@ -64,16 +64,24 @@ export async function getHistoricalMetrics(userId: string, calculatorType: 'phys
     if (error) throw error;
     
     // Transform the data to ensure it matches StoredHealthMetrics interface
-    const transformedData = (data || []).map(record => ({
-      id: record.id,
-      created_at: record.created_at,
-      user_id: record.user_id,
-      physical_recovery: record.physical_recovery || 0,
-      mental_health: record.mental_health || 0,
-      overall_health: record.overall_health || 0,
-      calculator_type: calculatorType,
-      ml_prediction: record.ml_prediction as MLPrediction
-    }));
+    const transformedData = (rawData || []).map(record => {
+      // Safely cast ml_prediction to MLPrediction type
+      const mlPrediction = record.ml_prediction as { recommendation: string; score: number };
+      
+      return {
+        id: record.id,
+        created_at: record.created_at,
+        user_id: record.user_id,
+        physical_recovery: record.physical_recovery || 0,
+        mental_health: record.mental_health || 0,
+        overall_health: record.overall_health || 0,
+        calculator_type: calculatorType,
+        ml_prediction: {
+          recommendation: mlPrediction?.recommendation || "No recommendation available",
+          score: mlPrediction?.score || 0
+        }
+      };
+    });
 
     return transformedData;
   } catch (error) {
