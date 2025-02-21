@@ -27,36 +27,48 @@ interface DatabaseHealthMetrics {
 
 export async function submitMetricsToML(metrics: HealthMetrics, userId: string) {
   try {
-    // Create the ML prediction as a plain object that matches Json type
-    const mlPrediction = {
-      recommendation: "Keep up with your current routine",
-      score: (metrics.physical_recovery + metrics.mental_health + metrics.overall_health) / 3
-    } as Json;
+    // Compute ML prediction (for example, by averaging the metrics)
+    const avg =
+      (metrics.physical_recovery +
+        metrics.mental_health +
+        metrics.exercise +
+        metrics.sleep_quality) /
+      4;
 
-    // Create the data object that matches the database schema
+    const mlPrediction: MLPrediction = {
+      recommendation: "Keep up with your current routine",
+      score: avg, // ensure your ML model returns a score between 1 and 100
+    };
+
+    // Build the data object, ensuring numeric fields are numbers
     const dataToInsert = {
       physical_recovery: metrics.physical_recovery,
       mental_health: metrics.mental_health,
-      overall_health: metrics.overall_health,
+      exercise: metrics.exercise,
+      sleep_quality: metrics.sleep_quality,
       calculator_type: metrics.calculator_type,
       user_id: userId,
-      ml_prediction: mlPrediction
+      ml_prediction: mlPrediction as Json,
     };
 
+    // Insert the data into Supabase (wrapped in an array)
     const { data, error } = await supabase
-      .from('health_metrics')
-      .insert(dataToInsert)
-      .select()
-      .single();
+      .from("health_metrics")
+      .insert([dataToInsert])
+      .select();
 
-    if (error) throw error;
+    if (error) {
+      console.error("Error inserting into Supabase:", error);
+      throw error;
+    }
+
+    console.log("Successfully saved health metrics:", data);
     return data;
   } catch (error) {
-    console.error('Error in ML integration:', error);
+    console.error("Error in submitMetricsToML:", error);
     throw error;
   }
 }
-
 export async function getHistoricalMetrics(
   userId: string,
   calculatorType: 'physical' | 'mental'
