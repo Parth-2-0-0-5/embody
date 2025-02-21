@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -32,7 +32,7 @@ const Recovery = () => {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     
-    // Only allow numbers and empty string
+    // Only allow numbers 0-10 and empty string
     if (value === "" || (/^\d+$/.test(value) && parseInt(value) >= 0 && parseInt(value) <= 10)) {
       setMetrics(prev => ({ ...prev, [name]: value }));
     } else {
@@ -43,6 +43,17 @@ const Recovery = () => {
   const handleSubmit = async () => {
     if (!user) {
       toast.error("Please login to submit metrics");
+      return;
+    }
+
+    // Validate all inputs are numbers between 0 and 10
+    const isValid = Object.values(metrics).every(value => {
+      const num = parseInt(value);
+      return !isNaN(num) && num >= 0 && num <= 10;
+    });
+
+    if (!isValid) {
+      toast.error("All fields must be numbers between 0 and 10");
       return;
     }
 
@@ -63,6 +74,16 @@ const Recovery = () => {
 
       await submitMetricsToML(healthMetrics, user.id);
       toast.success("Metrics submitted successfully!");
+      
+      // Clear form after successful submission
+      setMetrics({
+        painLevel: "",
+        mobilityLevel: "",
+        fatigueLevel: "",
+        dailyActivity: "",
+        sleepQuality: "",
+        dietaryHabits: "",
+      });
     } catch (error) {
       console.error("Error submitting metrics:", error);
       toast.error("Failed to submit metrics");
