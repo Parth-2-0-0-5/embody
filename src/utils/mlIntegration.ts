@@ -8,6 +8,16 @@ interface HealthMetrics {
   calculator_type: 'physical' | 'mental';
 }
 
+interface StoredHealthMetrics extends HealthMetrics {
+  id: string;
+  created_at: string;
+  user_id: string;
+  ml_prediction: {
+    recommendation: string;
+    score: number;
+  };
+}
+
 export async function submitMetricsToML(metrics: HealthMetrics, userId: string) {
   try {
     const { data, error } = await supabase
@@ -34,7 +44,7 @@ export async function submitMetricsToML(metrics: HealthMetrics, userId: string) 
   }
 }
 
-export async function getHistoricalMetrics(userId: string, calculatorType: 'physical' | 'mental') {
+export async function getHistoricalMetrics(userId: string, calculatorType: 'physical' | 'mental'): Promise<StoredHealthMetrics[]> {
   try {
     const { data, error } = await supabase
       .from('health_metrics')
