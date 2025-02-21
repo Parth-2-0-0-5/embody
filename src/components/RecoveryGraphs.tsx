@@ -26,7 +26,9 @@ interface BaseMetrics {
 }
 
 export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) => {
-  const [historicalData, setHistoricalData] = useState<any[]>([]);
+  const [physicalData, setPhysicalData] = useState<any[]>([]);
+  const [mentalData, setMentalData] = useState<any[]>([]);
+  const [overallData, setOverallData] = useState<any[]>([]);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -37,33 +39,57 @@ export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) 
       }
 
       try {
-        // Calculate current metrics
         const currentMetrics = {
-          physical_recovery: (
-            parseFloat(metrics.painLevel || '0') + 
-            parseFloat(metrics.mobilityLevel || '0') + 
-            parseFloat(metrics.fatigueLevel || '0')
-          ) / 3 * 10,
-          mental_health: (
-            parseFloat(metrics.stressLevel || '0') + 
-            parseFloat(metrics.moodLevel || '0') + 
-            parseFloat(metrics.anxietyLevel || '0')
-          ) / 3 * 10,
-          overall_health: (
-            parseFloat(metrics.sleepQuality || '0') + 
-            parseFloat(metrics.dietaryHabits || '0')
-          ) / 2 * 10,
+          painLevel: parseFloat(metrics.painLevel || '0') * 10,
+          mobilityLevel: parseFloat(metrics.mobilityLevel || '0') * 10,
+          fatigueLevel: parseFloat(metrics.fatigueLevel || '0') * 10,
+          stressLevel: parseFloat(metrics.stressLevel || '0') * 10,
+          moodLevel: parseFloat(metrics.moodLevel || '0') * 10,
+          anxietyLevel: parseFloat(metrics.anxietyLevel || '0') * 10,
+          sleepQuality: parseFloat(metrics.sleepQuality || '0') * 10,
+          dietaryHabits: parseFloat(metrics.dietaryHabits || '0') * 10,
         };
 
-        await submitMetricsToML(currentMetrics, user.id);
-        const history = await getHistoricalMetrics(user.id);
-        
-        const chartData = history.map(record => ({
+        await submitMetricsToML({
+          physical_recovery: (currentMetrics.painLevel + currentMetrics.mobilityLevel + currentMetrics.fatigueLevel) / 3,
+          mental_health: (currentMetrics.stressLevel + currentMetrics.moodLevel + currentMetrics.anxietyLevel) / 3,
+          overall_health: (currentMetrics.sleepQuality + currentMetrics.dietaryHabits) / 2,
+          calculator_type: 'physical'
+        }, user.id);
+
+        // Format historical data for each graph
+        const formatData = (data: any[]) => data.map(record => ({
           date: new Date(record.created_at || '').toLocaleDateString(),
           ...record,
         })).reverse();
 
-        setHistoricalData(chartData);
+        const history = await getHistoricalMetrics(user.id, 'physical');
+        const formattedData = formatData(history);
+
+        // Split data into separate arrays for each graph type
+        const physical = formattedData.map(d => ({
+          date: d.date,
+          painLevel: parseFloat(metrics.painLevel || '0') * 10,
+          mobilityLevel: parseFloat(metrics.mobilityLevel || '0') * 10,
+          fatigueLevel: parseFloat(metrics.fatigueLevel || '0') * 10,
+        }));
+
+        const mental = formattedData.map(d => ({
+          date: d.date,
+          stressLevel: parseFloat(metrics.stressLevel || '0') * 10,
+          moodLevel: parseFloat(metrics.moodLevel || '0') * 10,
+          anxietyLevel: parseFloat(metrics.anxietyLevel || '0') * 10,
+        }));
+
+        const overall = formattedData.map(d => ({
+          date: d.date,
+          sleepQuality: parseFloat(metrics.sleepQuality || '0') * 10,
+          dietaryHabits: parseFloat(metrics.dietaryHabits || '0') * 10,
+        }));
+
+        setPhysicalData(physical);
+        setMentalData(mental);
+        setOverallData(overall);
         toast.success('Health metrics saved successfully');
       } catch (error) {
         console.error('Error processing metrics:', error);
@@ -76,68 +102,86 @@ export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) 
     }
   }, [metrics, user]);
 
-  const graphs = [
-    {
-      title: "Physical Health Metrics",
-      description: "Pain, Mobility, and Fatigue Levels",
-      metrics: [
-        { key: "painLevel", color: "#ef4444", name: "Pain" },
-        { key: "mobilityLevel", color: "#22c55e", name: "Mobility" },
-        { key: "fatigueLevel", color: "#f59e0b", name: "Fatigue" }
-      ]
-    },
-    {
-      title: "Mental Health Metrics",
-      description: "Stress, Mood, and Anxiety Levels",
-      metrics: [
-        { key: "stressLevel", color: "#8b5cf6", name: "Stress" },
-        { key: "moodLevel", color: "#06b6d4", name: "Mood" },
-        { key: "anxietyLevel", color: "#ec4899", name: "Anxiety" }
-      ]
-    },
-    {
-      title: "Overall Health Metrics",
-      description: "Sleep Quality and Dietary Habits",
-      metrics: [
-        { key: "sleepQuality", color: "#3b82f6", name: "Sleep" },
-        { key: "dietaryHabits", color: "#10b981", name: "Diet" }
-      ]
-    }
-  ];
+  // Only render graphs that have corresponding metrics filled
+  const shouldShowPhysical = metrics.painLevel || metrics.mobilityLevel || metrics.fatigueLevel;
+  const shouldShowMental = metrics.stressLevel || metrics.moodLevel || metrics.anxietyLevel;
+  const shouldShowOverall = metrics.sleepQuality || metrics.dietaryHabits;
 
   return (
-    <div className="space-y-6">
-      {graphs.map((graph, index) => (
-        <Card key={index} className="w-full">
+    <div className="space-y-4">
+      {shouldShowPhysical && (
+        <Card className="w-full">
           <CardHeader>
-            <CardTitle>{graph.title}</CardTitle>
-            <CardDescription>{graph.description}</CardDescription>
+            <CardTitle>Physical Health Metrics</CardTitle>
+            <CardDescription>Pain, Mobility, and Fatigue Levels</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="h-[300px] w-full">
               <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={historicalData}>
+                <LineChart data={physicalData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="date" />
                   <YAxis domain={[0, 100]} />
                   <Tooltip />
                   <Legend />
-                  {graph.metrics.map((metric) => (
-                    <Line
-                      key={metric.key}
-                      type="monotone"
-                      dataKey={metric.key}
-                      stroke={metric.color}
-                      name={metric.name}
-                      strokeWidth={2}
-                    />
-                  ))}
+                  <Line type="monotone" dataKey="painLevel" stroke="#ef4444" name="Pain" strokeWidth={2} />
+                  <Line type="monotone" dataKey="mobilityLevel" stroke="#22c55e" name="Mobility" strokeWidth={2} />
+                  <Line type="monotone" dataKey="fatigueLevel" stroke="#f59e0b" name="Fatigue" strokeWidth={2} />
                 </LineChart>
               </ResponsiveContainer>
             </div>
           </CardContent>
         </Card>
-      ))}
+      )}
+
+      {shouldShowMental && (
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Mental Health Metrics</CardTitle>
+            <CardDescription>Stress, Mood, and Anxiety Levels</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={mentalData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis domain={[0, 100]} />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="stressLevel" stroke="#8b5cf6" name="Stress" strokeWidth={2} />
+                  <Line type="monotone" dataKey="moodLevel" stroke="#06b6d4" name="Mood" strokeWidth={2} />
+                  <Line type="monotone" dataKey="anxietyLevel" stroke="#ec4899" name="Anxiety" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {shouldShowOverall && (
+        <Card className="w-full">
+          <CardHeader>
+            <CardTitle>Overall Health Metrics</CardTitle>
+            <CardDescription>Sleep Quality and Dietary Habits</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[300px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={overallData}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="date" />
+                  <YAxis domain={[0, 100]} />
+                  <Tooltip />
+                  <Legend />
+                  <Line type="monotone" dataKey="sleepQuality" stroke="#3b82f6" name="Sleep" strokeWidth={2} />
+                  <Line type="monotone" dataKey="dietaryHabits" stroke="#10b981" name="Diet" strokeWidth={2} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
