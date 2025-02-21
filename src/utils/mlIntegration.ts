@@ -58,10 +58,13 @@ export async function submitMetricsToML(metrics: HealthMetrics, userId: string) 
   }
 }
 
-export async function getHistoricalMetrics(userId: string, calculatorType: 'physical' | 'mental'): Promise<DatabaseHealthMetrics[]> {
+export async function getHistoricalMetrics(
+  userId: string,
+  calculatorType: 'physical' | 'mental'
+): Promise<DatabaseHealthMetrics[]> {
   try {
     const { data, error } = await supabase
-      .from('health_metrics')
+      .from<DatabaseHealthMetrics>('health_metrics') // Provide the generic type here
       .select('*')
       .eq('user_id', userId)
       .eq('calculator_type', calculatorType)
@@ -69,6 +72,13 @@ export async function getHistoricalMetrics(userId: string, calculatorType: 'phys
       .limit(10);
 
     if (error) throw error;
+    return data || [];
+  } catch (error) {
+    console.error('Error fetching historical metrics:', error);
+    throw error;
+  }
+}
+
     
     // Transform the data to ensure all required fields are present
     const transformedData = (data || []).map(record => ({
