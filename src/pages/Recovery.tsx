@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+
+import React, { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -14,8 +15,11 @@ import { RecoveryGraphs } from "@/components/RecoveryGraphs";
 import { motion } from "framer-motion";
 import { SharedHeader } from "@/components/SharedHeader";
 import { Footer } from "@/components/Footer";
+import { useAuth } from "@/contexts/AuthContext";
+import { submitMetricsToML } from "@/utils/mlIntegration";
 
 const Recovery = () => {
+  const { user } = useAuth();
   const [metrics, setMetrics] = useState({
     painLevel: "",
     mobilityLevel: "",
@@ -27,12 +31,41 @@ const Recovery = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const numValue = parseInt(value);
     
-    if ((numValue >= 0 && numValue <= 10) || value === "") {
+    // Only allow numbers and empty string
+    if (value === "" || (/^\d+$/.test(value) && parseInt(value) >= 0 && parseInt(value) <= 10)) {
       setMetrics(prev => ({ ...prev, [name]: value }));
     } else {
       toast.error("Please enter a number between 0 and 10");
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (!user) {
+      toast.error("Please login to submit metrics");
+      return;
+    }
+
+    try {
+      const healthMetrics = {
+        physical_recovery: (
+          parseFloat(metrics.painLevel) +
+          parseFloat(metrics.mobilityLevel) +
+          parseFloat(metrics.fatigueLevel)
+        ) / 3,
+        mental_health: 0, // Not relevant for physical metrics
+        overall_health: (
+          parseFloat(metrics.sleepQuality) +
+          parseFloat(metrics.dietaryHabits)
+        ) / 2,
+        calculator_type: 'physical' as const
+      };
+
+      await submitMetricsToML(healthMetrics, user.id);
+      toast.success("Metrics submitted successfully!");
+    } catch (error) {
+      console.error("Error submitting metrics:", error);
+      toast.error("Failed to submit metrics");
     }
   };
 
@@ -96,6 +129,13 @@ const Recovery = () => {
                       />
                     </div>
                   ))}
+                  <Button 
+                    onClick={handleSubmit}
+                    disabled={!allFieldsFilled}
+                    className="w-full mt-4"
+                  >
+                    Submit Metrics
+                  </Button>
                 </CardContent>
               </Card>
             </motion.div>
