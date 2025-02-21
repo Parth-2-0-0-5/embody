@@ -81,20 +81,33 @@ export async function getHistoricalMetrics(
 
     
     // Transform the data to ensure all required fields are present
-    const transformedData = (data || []).map(record => ({
-      id: record.id,
-      created_at: record.created_at,
-      user_id: record.user_id,
-      physical_recovery: record.physical_recovery || 0,
-      mental_health: record.mental_health || 0,
-      overall_health: record.overall_health || 0,
-      calculator_type: record.calculator_type || calculatorType,
-      ml_prediction: record.ml_prediction as Json
-    }));
+// Ensure the interface includes calculator_type
+interface DatabaseHealthMetrics {
+  id: string;
+  created_at: string;
+  user_id: string;
+  physical_recovery: number;
+  mental_health: number;
+  overall_health: number;
+  calculator_type?: 'physical' | 'mental';
+  ml_prediction: Json;
+}
 
-    return transformedData;
-  } catch (error) {
-    console.error('Error fetching historical metrics:', error);
-    throw error;
-  }
+const transformedData: DatabaseHealthMetrics[] = (data || []).map((record: DatabaseHealthMetrics) => ({
+  id: record.id,
+  created_at: record.created_at,
+  user_id: record.user_id,
+  physical_recovery: record.physical_recovery || 0,
+  mental_health: record.mental_health || 0,
+  overall_health: record.overall_health || 0,
+  calculator_type: record.calculator_type || calculatorType,
+  ml_prediction: record.ml_prediction as Json,
+}));
+
+return transformedData;
+} catch (error) {
+  console.error('Error fetching historical metrics:', error);
+  throw error;
+}
+
 }
