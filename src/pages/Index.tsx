@@ -39,9 +39,9 @@ const Index = () => {
         <Features />
       </div>
       
-      <section className="py-20 bg-white/50 dark:bg-gray-800/50">
-        <div className="container mx-auto px-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-20">
+      <section className="py-16 bg-white/50 dark:bg-gray-800/50">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center mb-16">
             <motion.div 
               initial={{ opacity: 0, x: -20 }}
               whileInView={{ opacity: 1, x: 0 }}
@@ -50,13 +50,16 @@ const Index = () => {
               className="fade-up"
             >
               <h2 className="text-3xl md:text-4xl font-bold mb-6 dark:text-white">
-                Expert Care and Guidance
+                Expert Care and Guidance for Your Recovery Journey
               </h2>
               <p className="text-lg text-muted-foreground dark:text-gray-300 mb-4">
-                Our team of healthcare professionals provides personalized care and guidance throughout your recovery journey. We understand that each patient's needs are unique, and we tailor our approach accordingly.
+                Our team of healthcare professionals provides personalized care and guidance throughout your recovery journey. We understand that each patient's needs are unique, and we tailor our approach to ensure optimal results.
+              </p>
+              <p className="text-lg text-muted-foreground dark:text-gray-300 mb-4">
+                Regular consultations and progress monitoring ensure you're on the right path to recovery. Our advanced tracking systems help identify areas of improvement and celebrate your successes along the way.
               </p>
               <p className="text-lg text-muted-foreground dark:text-gray-300">
-                Regular consultations and progress monitoring ensure you're on the right path to recovery.
+                With real-time feedback and adjustments to your care plan, we help you achieve your health goals efficiently and sustainably.
               </p>
             </motion.div>
             <motion.div 
@@ -64,17 +67,17 @@ const Index = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
-              className="image-fade rounded-xl overflow-hidden shadow-xl"
+              className="image-fade"
             >
               <img 
                 src="/lovable-uploads/50b5a2ea-fcff-4258-a137-3fa7db69fe87.png"
                 alt="Healthcare consultation"
-                className="w-full h-auto object-cover"
+                className="w-full h-auto rounded-xl shadow-xl"
               />
             </motion.div>
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
