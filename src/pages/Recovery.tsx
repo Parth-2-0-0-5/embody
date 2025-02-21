@@ -106,7 +106,7 @@ const Recovery = () => {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
               >
-                <RecoveryGraphs metrics={metrics} />
+                <RecoveryGraphs metrics={metrics} calculatorType="physical" />
               </motion.div>
             )}
           </div>

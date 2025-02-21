@@ -1,16 +1,15 @@
 
 import { supabase } from "@/integrations/supabase/client";
-import { useAuth } from "@/contexts/AuthContext";
 
 interface HealthMetrics {
   physical_recovery: number;
   mental_health: number;
   overall_health: number;
+  calculator_type: 'physical' | 'mental';
 }
 
 export async function submitMetricsToML(metrics: HealthMetrics, userId: string) {
   try {
-    // Store metrics in Supabase with user_id
     const { data, error } = await supabase
       .from('health_metrics')
       .insert([
@@ -18,8 +17,8 @@ export async function submitMetricsToML(metrics: HealthMetrics, userId: string) 
           physical_recovery: metrics.physical_recovery,
           mental_health: metrics.mental_health,
           overall_health: metrics.overall_health,
+          calculator_type: metrics.calculator_type,
           user_id: userId,
-          // For now, we'll skip the ML prediction and just store the metrics
           ml_prediction: {
             recommendation: "Keep up with your current routine",
             score: (metrics.physical_recovery + metrics.mental_health + metrics.overall_health) / 3
@@ -35,12 +34,13 @@ export async function submitMetricsToML(metrics: HealthMetrics, userId: string) 
   }
 }
 
-export async function getHistoricalMetrics(userId: string) {
+export async function getHistoricalMetrics(userId: string, calculatorType: 'physical' | 'mental') {
   try {
     const { data, error } = await supabase
       .from('health_metrics')
       .select('*')
       .eq('user_id', userId)
+      .eq('calculator_type', calculatorType)
       .order('created_at', { ascending: false })
       .limit(10);
 
