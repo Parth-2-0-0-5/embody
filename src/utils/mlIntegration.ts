@@ -1,5 +1,6 @@
 
 import { supabase } from "@/integrations/supabase/client";
+import { Json } from "@/integrations/supabase/types";
 
 interface HealthMetrics {
   physical_recovery: number;
@@ -8,14 +9,20 @@ interface HealthMetrics {
   calculator_type: 'physical' | 'mental';
 }
 
-interface StoredHealthMetrics extends HealthMetrics {
+interface MLPrediction {
+  recommendation: string;
+  score: number;
+}
+
+interface StoredHealthMetrics {
   id: string;
   created_at: string;
   user_id: string;
-  ml_prediction: {
-    recommendation: string;
-    score: number;
-  };
+  physical_recovery: number;
+  mental_health: number;
+  overall_health: number;
+  calculator_type: 'physical' | 'mental';
+  ml_prediction: MLPrediction;
 }
 
 export async function submitMetricsToML(metrics: HealthMetrics, userId: string) {
@@ -55,7 +62,20 @@ export async function getHistoricalMetrics(userId: string, calculatorType: 'phys
       .limit(10);
 
     if (error) throw error;
-    return data || [];
+    
+    // Transform the data to ensure it matches StoredHealthMetrics interface
+    const transformedData = (data || []).map(record => ({
+      id: record.id,
+      created_at: record.created_at,
+      user_id: record.user_id,
+      physical_recovery: record.physical_recovery || 0,
+      mental_health: record.mental_health || 0,
+      overall_health: record.overall_health || 0,
+      calculator_type: calculatorType,
+      ml_prediction: record.ml_prediction as MLPrediction
+    }));
+
+    return transformedData;
   } catch (error) {
     console.error('Error fetching historical metrics:', error);
     throw error;
