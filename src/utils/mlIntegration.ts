@@ -2,6 +2,7 @@
 import { supabase } from "@/integrations/supabase/client";
 import { Database } from "@/integrations/supabase/types";
 
+// Define base types
 type HealthMetrics = {
   physical_recovery: number;
   mental_health: number;
@@ -14,14 +15,21 @@ type MLPrediction = {
   score: number;
 };
 
-// Use the exact types from the database
-type DatabaseHealthMetrics = Database['public']['Tables']['health_metrics']['Row'] & {
+// Simplified database type without type recursion
+type DatabaseHealthMetrics = {
+  id: string;
+  created_at: string | null;
+  user_id: string | null;
+  physical_recovery: number | null;
+  mental_health: number | null;
+  overall_health: number | null;
+  ml_prediction: MLPrediction | null;
   calculator_type: 'physical' | 'mental';
 };
 
 export async function submitMetricsToML(metrics: HealthMetrics, userId: string) {
   try {
-    const mlPrediction = {
+    const mlPrediction: MLPrediction = {
       recommendation: "Keep up with your current routine",
       score: (metrics.physical_recovery + metrics.mental_health + metrics.overall_health) / 3
     };
@@ -62,10 +70,16 @@ export async function getHistoricalMetrics(
 
     if (error) throw error;
 
-    // Transform data to include calculator_type
-    const transformedData = (data || []).map(record => ({
-      ...record,
-      calculator_type: calculatorType as 'physical' | 'mental'
+    // Safely transform the data with explicit typing
+    const transformedData: DatabaseHealthMetrics[] = (data || []).map(record => ({
+      id: record.id || '',
+      created_at: record.created_at,
+      user_id: record.user_id,
+      physical_recovery: record.physical_recovery,
+      mental_health: record.mental_health,
+      overall_health: record.overall_health,
+      ml_prediction: record.ml_prediction as MLPrediction,
+      calculator_type: calculatorType
     }));
 
     return transformedData;
