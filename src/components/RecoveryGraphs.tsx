@@ -25,7 +25,7 @@ interface BaseMetrics {
   [key: string]: string;
 }
 
-export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) => {
+export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics; calculatorType: 'physical' | 'mental' }> = ({ metrics, calculatorType }) => {
   const [historicalData, setHistoricalData] = useState<any[]>([]);
   const { user } = useAuth();
 
@@ -37,41 +37,53 @@ export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) 
       }
 
       try {
-        // Calculate current metrics
-        const currentMetrics = {
-          physical_recovery: (
-            parseFloat(metrics.painLevel || '0') + 
-            parseFloat(metrics.mobilityLevel || '0') + 
-            parseFloat(metrics.fatigueLevel || '0')
-          ) / 3 * 10, // Scale to 0-100
-          mental_health: (
-            parseFloat(metrics.stressLevel || '0') + 
-            parseFloat(metrics.moodLevel || '0') + 
-            parseFloat(metrics.anxietyLevel || '0')
-          ) / 3 * 10,
-          overall_health: (
-            parseFloat(metrics.sleepQuality || '0') + 
-            parseFloat(metrics.dietaryHabits || '0')
-          ) / 2 * 10,
-        };
-
-        // Submit to Supabase and get prediction
-        await submitMetricsToML(currentMetrics, user.id);
+        // Calculate metrics based on calculator type
+        let currentMetrics;
         
-        // Fetch updated historical data
-        const history = await getHistoricalMetrics(user.id);
+        if (calculatorType === 'physical') {
+          currentMetrics = {
+            physical_recovery: (
+              parseFloat(metrics.painLevel || '0') + 
+              parseFloat(metrics.mobilityLevel || '0') + 
+              parseFloat(metrics.fatigueLevel || '0')
+            ) / 3 * 10,
+            mental_health: 0, // Not relevant for physical calculator
+            overall_health: (
+              parseFloat(metrics.sleepQuality || '0') + 
+              parseFloat(metrics.dietaryHabits || '0')
+            ) / 2 * 10,
+          };
+        } else {
+          currentMetrics = {
+            physical_recovery: 0, // Not relevant for mental calculator
+            mental_health: (
+              parseFloat(metrics.stressLevel || '0') + 
+              parseFloat(metrics.moodLevel || '0') + 
+              parseFloat(metrics.anxietyLevel || '0')
+            ) / 3 * 10,
+            overall_health: (
+              parseFloat(metrics.sleepQuality || '0') + 
+              parseFloat(metrics.dietaryHabits || '0')
+            ) / 2 * 10,
+          };
+        }
+
+        // Submit to Supabase with calculator type
+        await submitMetricsToML({ ...currentMetrics, calculator_type: calculatorType }, user.id);
+        
+        // Fetch updated historical data for this calculator type
+        const history = await getHistoricalMetrics(user.id, calculatorType);
         
         // Transform data for chart
         const chartData = history.map(record => ({
           date: new Date(record.created_at).toLocaleDateString(),
-          physical: Math.round(record.physical_recovery),
-          mental: Math.round(record.mental_health),
+          value: calculatorType === 'physical' ? 
+            Math.round(record.physical_recovery) : 
+            Math.round(record.mental_health),
           overall: Math.round(record.overall_health),
-        })).reverse(); // Reverse to show oldest to newest
+        })).reverse();
 
         setHistoricalData(chartData);
-        
-        // Show success message
         toast.success('Health metrics saved successfully');
       } catch (error) {
         console.error('Error processing metrics:', error);
@@ -82,12 +94,12 @@ export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) 
     if (Object.values(metrics).every(value => value !== '')) {
       processMetrics();
     }
-  }, [metrics, user]);
+  }, [metrics, user, calculatorType]);
 
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>Your Health Progress</CardTitle>
+        <CardTitle>Your {calculatorType === 'physical' ? 'Physical' : 'Mental'} Health Progress</CardTitle>
         <CardDescription>Health Analysis & Tracking</CardDescription>
       </CardHeader>
       <CardContent>
@@ -101,16 +113,9 @@ export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) 
               <Legend />
               <Line
                 type="monotone"
-                dataKey="physical"
-                stroke="#22c55e"
-                name="Physical Health"
-                strokeWidth={2}
-              />
-              <Line
-                type="monotone"
-                dataKey="mental"
-                stroke="#8b5cf6"
-                name="Mental Health"
+                dataKey="value"
+                stroke={calculatorType === 'physical' ? "#22c55e" : "#8b5cf6"}
+                name={calculatorType === 'physical' ? "Physical Health" : "Mental Health"}
                 strokeWidth={2}
               />
               <Line

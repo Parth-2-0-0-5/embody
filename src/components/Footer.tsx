@@ -1,11 +1,23 @@
 
 import { Link } from "react-router-dom";
 import { Mail, Phone, MapPin } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export const Footer = () => {
+  const navigate = useNavigate();
+
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    } else {
+      navigate('/', { state: { scrollTo: sectionId } });
+    }
+  };
+
   return (
     <footer className="bg-primary/5 border-t">
-      <div className="container mx-auto px-6 py-12">
+      <div className="container mx-auto px-6 py-8">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand and Description */}
           <div className="space-y-4">
@@ -13,7 +25,7 @@ export const Footer = () => {
               Embody
             </Link>
             <p className="text-muted-foreground">
-              Your trusted companion on the journey to physical and mental wellness.
+              Your trusted companion on the journey to physical and mental wellness. We provide comprehensive health tracking and personalized recommendations to help you achieve your wellness goals.
             </p>
           </div>
 
@@ -22,19 +34,28 @@ export const Footer = () => {
             <h3 className="font-semibold text-lg mb-4">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="#features" className="text-muted-foreground hover:text-primary transition-colors">
+                <button
+                  onClick={() => scrollToSection('features')}
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   Features
-                </Link>
+                </button>
               </li>
               <li>
-                <Link to="#testimonials" className="text-muted-foreground hover:text-primary transition-colors">
+                <button
+                  onClick={() => scrollToSection('testimonials')}
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
                   Testimonials
-                </Link>
+                </button>
               </li>
               <li>
-                <Link to="#about" className="text-muted-foreground hover:text-primary transition-colors">
-                  About Us
-                </Link>
+                <button
+                  onClick={() => scrollToSection('contact')}
+                  className="text-muted-foreground hover:text-primary transition-colors"
+                >
+                  Contact Us
+                </button>
               </li>
             </ul>
           </div>
@@ -73,10 +94,13 @@ export const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t text-center text-muted-foreground">
+        <div className="mt-8 pt-6 border-t text-center text-muted-foreground">
           <p>&copy; {new Date().getFullYear()} Embody. All rights reserved.</p>
+          <p className="mt-2">
+            Dedicated to providing comprehensive health tracking and wellness solutions for a better, healthier life.
+          </p>
         </div>
       </div>
     </footer>
   );
-};
+}
