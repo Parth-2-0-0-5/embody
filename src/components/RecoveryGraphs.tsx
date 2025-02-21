@@ -40,19 +40,19 @@ export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) 
         // Calculate current metrics
         const currentMetrics = {
           physical_recovery: (
-            parseFloat(metrics.painLevel) + 
-            parseFloat(metrics.mobilityLevel) + 
-            parseFloat(metrics.fatigueLevel)
-          ) / 3, // Normalize to 0-100 scale
+            parseFloat(metrics.painLevel || '0') + 
+            parseFloat(metrics.mobilityLevel || '0') + 
+            parseFloat(metrics.fatigueLevel || '0')
+          ) / 3 * 10, // Scale to 0-100
           mental_health: (
-            parseFloat(metrics.stressLevel) + 
-            parseFloat(metrics.moodLevel) + 
-            parseFloat(metrics.anxietyLevel)
-          ) / 3,
+            parseFloat(metrics.stressLevel || '0') + 
+            parseFloat(metrics.moodLevel || '0') + 
+            parseFloat(metrics.anxietyLevel || '0')
+          ) / 3 * 10,
           overall_health: (
-            parseFloat(metrics.sleepQuality) + 
-            parseFloat(metrics.dietaryHabits)
-          ) / 2,
+            parseFloat(metrics.sleepQuality || '0') + 
+            parseFloat(metrics.dietaryHabits || '0')
+          ) / 2 * 10,
         };
 
         // Submit to Supabase and get prediction
@@ -67,9 +67,12 @@ export const RecoveryGraphs: React.FC<{ metrics: BaseMetrics }> = ({ metrics }) 
           physical: Math.round(record.physical_recovery),
           mental: Math.round(record.mental_health),
           overall: Math.round(record.overall_health),
-        }));
+        })).reverse(); // Reverse to show oldest to newest
 
         setHistoricalData(chartData);
+        
+        // Show success message
+        toast.success('Health metrics saved successfully');
       } catch (error) {
         console.error('Error processing metrics:', error);
         toast.error('Failed to save health metrics');
