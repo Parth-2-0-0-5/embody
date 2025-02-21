@@ -8,12 +8,21 @@ import { Button } from "./ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { User } from "lucide-react";
+import { useLocation } from "react-router-dom";
 
 export function Header() {
   const { user, logout, isAuthenticated } = useAuth();
   const { toast } = useToast();
+  const location = useLocation();
 
   const scrollToSection = (sectionId: string) => {
+    // Check if we're on the home page
+    if (location.pathname !== '/') {
+      window.location.href = `/${sectionId}`;
+      return;
+    }
+    
+    // If we're already on the home page, scroll to the section
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
