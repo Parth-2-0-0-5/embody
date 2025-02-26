@@ -1,69 +1,86 @@
-# Welcome to your Lovable project
+# Embody
 
-## Project info
+## Overview
 
-**URL**: https://lovable.dev/projects/6200e005-df33-46e9-93d6-1b7c02bcb551
+Embody is a revolutionary web application designed to track recovery progress from physical injuries while considering mental health and overall lifestyle. Unlike traditional recovery tracking tools that focus solely on physical rehabilitation, Embody integrates multiple facets of well-being—physical health, mental health, exercise, and sleep quality—to provide a holistic view of recovery.
 
-## How can I edit this code?
+At its core, Embody leverages machine learning models to analyze user data, offering insightful visualizations and personalized recovery progress reports. By combining real-time tracking with intelligent analysis, Embody ensures users receive data-driven guidance on their journey to full recovery.
 
-There are several ways of editing your application.
+## Tech Stack & Tools Used
 
-**Use Lovable**
+Embody is built using the latest technologies to ensure high performance, scalability, and an intuitive user experience:
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/6200e005-df33-46e9-93d6-1b7c02bcb551) and start prompting.
+### Frontend:
 
-Changes made via Lovable will be committed automatically to this repo.
+- **Vite** – Fast build tool for modern web applications
+- **TypeScript** – Enhancing reliability and maintainability
+- **React** – Dynamic and responsive UI development
+- **Tailwind CSS** – Utility-first styling for efficient design
 
-**Use your preferred IDE**
+### Backend & Database:
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **Supabase** – Secure user authentication and data storage
+- **Node.js & Express.js** (Planned for backend logic and API handling)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Machine Learning:
 
-Follow these steps:
+- Custom-trained **ML models** powering each tracker
+- Another additional model aggregating all tracker results for a final recovery progress report
+- **Currently, 3 models are operational, with the remaining 2 in development and to be integrated soon.**
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+## Features
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+- **Holistic Recovery Tracking**: Tracks not only physical health but also mental well-being, exercise habits, and sleep quality.
+- **AI-Powered Insights**: Each tracker is backed by an ML model to provide accurate, data-driven analysis.
+- **Comprehensive Recovery Report**: A unique 5th model aggregates all individual tracker results for a final, holistic progress report.
+- **Data Visualization**: Intuitive, easy-to-read graphs help users monitor trends and make informed decisions.
+- **Secure User Authentication**: Every user has a personal account with securely stored data using Supabase.
 
-# Step 3: Install the necessary dependencies.
-npm i
+## Technical Workflow
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
-```
+1. **User Authentication**
 
-**Edit a file directly in GitHub**
+   - Users log in using their credentials via Supabase authentication.
+   - Secure data storage ensures privacy and accessibility.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+2. **Data Entry & Tracking**
 
-**Use GitHub Codespaces**
+   - Users input relevant data into four trackers: Physical Health, Mental Health, Exercise, and Sleep Quality.
+   - Each tracker processes the input through a dedicated ML model.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+3. **Machine Learning Processing**
 
-## What technologies are used for this project?
+   - Each tracker’s ML model analyzes and returns personalized insights.
+   - The 5th ML model compiles data from all trackers to generate a final recovery report.
 
-This project is built with .
+4. **Data Visualization**
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+   - All results are displayed via interactive and easy-to-read graphs.
+   - Users can track progress over time, identifying patterns and improvements.
 
-## How can I deploy this project?
+5. **Final Report Generation**
 
-Simply open [Lovable](https://lovable.dev/projects/6200e005-df33-46e9-93d6-1b7c02bcb551) and click on Share -> Publish.
+   - The system provides a comprehensive summary of the user’s recovery journey.
+   - Insights help users adjust their routines for optimal rehabilitation.
 
-## I want to use a custom domain - is that possible?
+## Why Embody is Unique
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+- **Truly Holistic Approach**: Unlike other apps that focus only on physical recovery, Embody integrates multiple well-being factors, making it a **first-of-its-kind solution**.
+- **ML-Driven Personalization**: The use of multiple trained models ensures that every user gets **tailored insights based on their unique recovery journey**.
+- **Seamless Visualization**: **Interactive and easy-to-read graphs** make data interpretation effortless, helping users stay motivated.
+- **Secure & Private**: With **Supabase-powered authentication**, user data remains safe and confidential.
+
+---
+
+Embody redefines recovery tracking by offering a **comprehensive, intelligent, and user-friendly** solution. Whether you're recovering from an injury or striving for a balanced lifestyle, Embody provides the insights you need to optimize your health journey.
+
+🚀 **Stay on track, stay motivated, and recover smarter with Embody!**
+
+### Access the Application
+
+For judging and review, access the deployed application here: [https://embody-blond.vercel.](https://embody-blond.vercel.app/)[app/](https://embody-blond.vercel.app/)
+
+### Work in Progress
+
+Embody is an evolving project. **Currently, 3 models are operational, and we will be integrating the remaining 2 as they are developed.**
+
