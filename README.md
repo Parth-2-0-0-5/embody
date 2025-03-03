@@ -35,6 +35,9 @@ Embody is built using the latest technologies to ensure high performance, scalab
 - **Comprehensive Recovery Report**: A unique 5th model aggregates all individual tracker results for a final, holistic progress report.
 - **Data Visualization**: Intuitive, easy-to-read graphs help users monitor trends and make informed decisions.
 - **Secure User Authentication**: Every user has a personal account with securely stored data using Supabase.
+- **Data Privacy & Security**: User data is encrypted and securely stored, ensuring compliance with best security practices.
+- **Dyslexic-Friendly Text**: Users have the option to enable dyslexic-friendly fonts for improved readability.
+- **Night Mode**: A dark theme option is available for better accessibility and user comfort.
 
 ## Technical Workflow
 
@@ -69,6 +72,8 @@ Embody is built using the latest technologies to ensure high performance, scalab
 - **ML-Driven Personalization**: The use of multiple trained models ensures that every user gets **tailored insights based on their unique recovery journey**.
 - **Seamless Visualization**: **Interactive and easy-to-read graphs** make data interpretation effortless, helping users stay motivated.
 - **Secure & Private**: With **Supabase-powered authentication**, user data remains safe and confidential.
+- **Data Protection Measures**: **Encryption and strict access controls** are in place to safeguard user information, ensuring privacy and security.
+- **Accessibility-Focused**: Features like **dyslexic-friendly text and night mode** enhance usability for a wider audience.
 
 ---
 
